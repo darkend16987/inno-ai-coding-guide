@@ -1,0 +1,33 @@
+# Mẫu .gitignore cho dự án Node / Python / Electron. Xoá dòng không dùng.
+# .gitignore KHÔNG xoá được secret đã commit trước đó — lộ key thì phải đổi key.
+
+# secrets & môi trường
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# build output
+dist/
+build/
+out/
+dist-app/
+*.log
+
+# hệ điều hành / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# cấu hình máy riêng của Claude Code (giữ lại .claude/skills nếu muốn chia sẻ skill trong repo)
+.claude/settings.local.json

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Làm phần mềm với AI — bộ skill & hướng dẫn GitHub cho team</title>
+<meta name="description" content="Bộ skill careful-engineering cho Claude Code / Codex và hướng dẫn GitHub Desktop: quy trình làm phần mềm với AI không hallucinate, không regression, có test, memo, handoff.">
+<style>
+:root{--bg:#f6f8fb;--paper:#fff;--ink:#172333;--muted:#64748b;--blue:#175cd3;--line:#e2e8f0;--soft:#eff6ff;--shadow:0 12px 36px rgba(15,23,42,.06)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 system-ui,-apple-system,'Segoe UI',Arial,sans-serif}
+a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+.topnav{position:sticky;top:0;z-index:10;background:#ffffffee;backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.topnav .in{max-width:1080px;margin:auto;padding:10px 16px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.topnav b{margin-right:auto;font-size:15px}
+.topnav a{font-size:13px;padding:5px 10px;border-radius:8px;color:#394b62}.topnav a:hover{background:var(--soft);text-decoration:none}
+.wrap{max-width:1080px;margin:auto;padding:22px 16px 70px}
+.hero{background:linear-gradient(118deg,#152d57,#2559a8);color:#fff;border-radius:22px;padding:42px 40px;margin-bottom:20px}
+.eyebrow{text-transform:uppercase;letter-spacing:.13em;opacity:.8;font-weight:700;font-size:12px}
+.hero h1{font-size:clamp(28px,4vw,44px);line-height:1.15;margin:12px 0 16px;letter-spacing:-.03em}
+.hero p{color:#e2edff;max-width:720px;margin:8px 0}
+.tagbar{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}.tag{border:1px solid #ffffff45;border-radius:100px;padding:4px 12px;font-size:12px;background:#ffffff13}
+.section{background:var(--paper);padding:30px 36px;border-radius:18px;box-shadow:var(--shadow);border:1px solid var(--line);margin-bottom:20px;scroll-margin-top:64px}
+.section h2{font-size:25px;line-height:1.3;letter-spacing:-.02em;margin:0 0 16px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+h3{font-size:18px;line-height:1.35;margin:24px 0 8px}
+code{background:#edf2f7;padding:2px 5px;border-radius:5px;font-size:.9em}
+pre{background:#132138;color:#e6f0ff;border-radius:12px;padding:15px 16px;overflow-x:auto;margin:10px 0}
+pre code{padding:0;background:none;font-size:13px;color:inherit;white-space:pre}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.card{border:1px solid var(--line);border-radius:14px;padding:18px 18px 16px;background:#fbfdff;display:flex;flex-direction:column}
+.card h3{margin:4px 0 6px}.card p{margin:4px 0 12px;color:#45566d;font-size:15px;flex:1}
+.card .num{font-weight:800;color:#2559a8;font-size:13px;letter-spacing:.08em}
+.btn{display:inline-block;border:1px solid #ccd8ed;background:#fff;color:#184c9b;padding:8px 13px;border-radius:9px;font:600 13px/1.3 inherit;cursor:pointer;font-family:inherit}
+.btn:hover{background:#edf5ff;text-decoration:none}.btn.primary{background:#1d58b2;color:#fff;border-color:#1d58b2}.btn.primary:hover{background:#174a98}
+.tip{background:#eef5ff;border-left:4px solid #3373df;padding:12px 16px;border-radius:0 9px 9px 0;margin:14px 0}
+.warning{background:#fff8e6;border-left:4px solid #e4a11a;padding:12px 16px;border-radius:0 9px 9px 0;margin:14px 0}
+.copyline{position:relative}.copyline .btn{position:absolute;right:8px;top:8px;background:#243853;border-color:#465674;color:#fff}.copyline pre{padding-right:110px}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.tabs button{padding:9px 13px;background:#f1f5fa;border:1px solid #d9e3ef;border-radius:9px;cursor:pointer;font-weight:650;color:#3f536b;font-family:inherit;font-size:14px}
+.tabs button[aria-selected=true]{background:#1d58b2;color:#fff;border-color:#1d58b2}
+.tabpanel[hidden]{display:none}
+.phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;counter-reset:ph}
+.phase{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#fff}
+.phase b{display:block;color:#1d4e9b}.phase small{color:var(--muted);display:block;margin-top:4px;line-height:1.5}
+.phase .v{margin-top:8px;font-size:12.5px;color:#0f5132;background:#eaf7ef;border-radius:7px;padding:4px 8px;line-height:1.45}
+table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0}td,th{padding:10px 11px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}th{background:#f0f5fc;color:#233e62}
+.table-wrap{overflow-x:auto}
+.prompt{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0;background:#fbfdff}
+.prompt h4{margin:0 0 6px}.prompt p{margin:6px 0 10px;white-space:pre-line;color:#26364a;font-size:15px}
+.check{display:flex;align-items:flex-start;gap:11px;padding:10px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.check input{margin-top:7px;width:17px;height:17px;accent-color:#2563eb;flex:none}
+.check:has(input:checked) span{color:#64748b;text-decoration:line-through}
+.progress{height:8px;background:#e5ebf4;border-radius:20px;overflow:hidden;margin-top:12px}.progress>div{height:100%;width:0;background:#2d6cdf;transition:width .2s}
+.progresslabel{font-size:12px;color:var(--muted);margin-top:6px}
+.viewer{display:grid;grid-template-columns:230px minmax(0,1fr);gap:16px}
+.filelist{border:1px solid var(--line);border-radius:12px;padding:8px;background:#fbfdff;align-self:start;position:sticky;top:70px}
+.filelist button{display:block;width:100%;text-align:left;border:0;background:none;padding:7px 10px;border-radius:8px;font:13px/1.4 inherit;font-family:inherit;color:#394b62;cursor:pointer}
+.filelist button:hover{background:var(--soft)}.filelist button[aria-current=true]{background:#1d58b2;color:#fff}
+.filelist .grp{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:8px 10px 2px}
+.md{border:1px solid var(--line);border-radius:12px;padding:6px 22px 18px;min-height:300px;overflow-wrap:anywhere}
+.md h1{font-size:24px;line-height:1.3}.md h2{font-size:20px;border:0;padding:0;margin:22px 0 8px}.md h3{font-size:17px}
+.md table{font-size:13.5px}.md blockquote{margin:12px 0;padding:8px 14px;border-left:4px solid #c9d9f0;background:#f7faff;color:#33475f}
+.md .src{font-size:12px;color:var(--muted);margin:10px 0 0}
+details{border:1px solid var(--line);border-radius:10px;margin:9px 0;background:#fff;padding:0 15px}
+summary{padding:12px 2px;cursor:pointer;font-weight:650}details>div{padding:0 2px 12px;color:#45566d}
+.foot{color:#64748b;text-align:center;font-size:13px;padding:15px}
+@media(max-width:820px){.section{padding:22px 18px}.hero{padding:30px 22px}.viewer{display:block}.filelist{position:static;margin-bottom:12px;display:flex;flex-wrap:wrap;gap:4px}.filelist button{width:auto}.filelist .grp{width:100%}}
+</style>
+</head>
+<body>
+<nav class="topnav"><div class="in"><b>AI Coding Guide</b>
+<a href="#start">Bắt đầu</a><a href="#install">Cài skill</a><a href="#workflow">Quy trình</a><a href="#prompts">Prompt mẫu</a><a href="#newproject">Dự án mới</a><a href="#skill">Đọc skill</a><a href="#faq">Hỏi đáp</a>
+</div></nav>
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">Cẩm nang nội bộ cho team</div>
+  <h1>Làm phần mềm & tool mới với AI —<br>đúng, chắc, không hồi quy</h1>
+  <p>Hai thứ mỗi thành viên cần: <strong>(1)</strong> biết dùng GitHub + GitHub Desktop + Claude Code / Codex, và <strong>(2)</strong> cài bộ skill <code style="background:#ffffff22;color:#fff">careful-engineering</code> để AI agent làm việc theo một quy trình có kế hoạch, có test, có memo bàn giao — rút ra từ những lỗi đã gặp thật khi làm các dự án của chúng ta.</p>
+  <div class="tagbar"><span class="tag">Windows 10/11</span><span class="tag">Claude Code</span><span class="tag">OpenAI Codex</span><span class="tag">GitHub Desktop</span><span class="tag">Tiếng Việt</span></div>
+</header>
+
+<section class="section" id="start">
+  <h2>Bắt đầu từ đâu?</h2>
+  <div class="cards">
+    <div class="card"><div class="num">BƯỚC 1 · MỘT LẦN</div><h3>Cài & dùng GitHub, AI agent</h3><p>Tạo tài khoản GitHub, cài GitHub Desktop, VS Code, Claude Code / Codex, kết nối dự án với repo, Commit / Push / Pull. Dành cho người chưa từng dùng Git.</p><a class="btn primary" href="guides/github-desktop-claude-code-codex.html">Mở hướng dẫn A–Z →</a></div>
+    <div class="card"><div class="num">BƯỚC 2 · MỘT LẦN</div><h3>Cài skill careful-engineering</h3><p>Một lệnh PowerShell. Sau đó mọi phiên Claude Code trên máy bạn đều có quy trình 8 pha: đọc → hiểu → kế hoạch → làm → kiểm chứng → ghi sổ → commit → deploy.</p><a class="btn primary" href="#install">Cài ngay →</a></div>
+    <div class="card"><div class="num">HẰNG NGÀY</div><h3>Giao việc cho AI đúng cách</h3><p>Dùng prompt mẫu: bắt AI viết lại yêu cầu + kế hoạch có bước kiểm chứng trước khi sửa, tái hiện lỗi trước khi sửa lỗi, báo cáo bằng số đo.</p><a class="btn primary" href="#prompts">Xem prompt mẫu →</a></div>
+  </div>
+  <div class="tip"><strong>Nhớ một câu:</strong> AI sửa file trên máy bạn — <strong>bạn</strong> là người review diff, chạy thử, rồi mới Commit → Push. Skill giúp AI tự kiểm chứng kỹ hơn, nhưng không thay được bước review của bạn.</div>
+</section>
+
+<section class="section" id="install">
+  <h2>Cài skill careful-engineering</h2>
+  <div class="tabs" role="tablist" aria-label="Cách cài">
+    <button role="tab" aria-selected="true" data-tab="user">Claude Code — cho cả máy (khuyến nghị)</button>
+    <button role="tab" aria-selected="false" data-tab="project">Claude Code — cho một repo</button>
+    <button role="tab" aria-selected="false" data-tab="codex">Codex / agent khác</button>
+    <button role="tab" aria-selected="false" data-tab="manual">Cài tay</button>
+  </div>
+  <div class="tabpanel" data-panel="user">
+    <p>Mở <strong>PowerShell</strong> (không cần quyền Admin) và chạy:</p>
+    <div class="copyline"><button class="btn copy" data-copy-target="inst-user">Sao chép</button><pre><code id="inst-user">irm https://darkend16987.github.io/inno-ai-coding-guide/install.ps1 | iex</code></pre></div>
+    <p>Skill được chép vào <code>%USERPROFILE%\.claude\skills\careful-engineering</code>. Nếu đã có bản cũ, bản cũ được đổi tên thành <code>…\careful-engineering.bak-&lt;ngày giờ&gt;</code> (không mất).</p>
+    <p><strong>Kiểm tra:</strong> mở một phiên Claude Code <em>mới</em>, gõ <code>/careful-engineering</code> hoặc hỏi <em>"Which skills are available?"</em> — phải thấy <code>careful-engineering</code>.</p>
+  </div>
+  <div class="tabpanel" data-panel="project" hidden>
+    <p>Dùng khi muốn skill <strong>đi theo repo</strong> (ai clone repo cũng có). Mở PowerShell <strong>tại thư mục gốc của repo</strong> rồi chạy:</p>
+    <div class="copyline"><button class="btn copy" data-copy-target="inst-proj">Sao chép</button><pre><code id="inst-proj">&amp; ([scriptblock]::Create((irm https://darkend16987.github.io/inno-ai-coding-guide/install.ps1))) -Project</code></pre></div>
+    <p>Skill vào <code>.claude\skills\careful-engineering</code> của repo. Commit thư mục đó bằng GitHub Desktop như mọi file khác.</p>
+  </div>
+  <div class="tabpanel" data-panel="codex" hidden>
+    <p>Codex và nhiều agent khác đọc file <code>AGENTS.md</code> ở gốc repo. Cách chắc chắn chạy được với mọi phiên bản:</p>
+    <ol>
+      <li>Chép thư mục <code>skills/careful-engineering</code> của repo này vào repo dự án (giữ nguyên đường dẫn <code>skills/careful-engineering/</code>).</li>
+      <li>Chép <a href="starter/AGENTS.md"><code>starter/AGENTS.md</code></a> vào gốc repo dự án — file này bảo agent đọc <code>CLAUDE.md</code> và làm theo <code>skills/careful-engineering/SKILL.md</code>.</li>
+    </ol>
+    <p>Nếu phiên bản Codex của bạn hỗ trợ "Agent Skills" (thư mục skill riêng của Codex), có thể đặt thư mục skill vào đó theo <a href="https://github.com/openai/codex" target="_blank" rel="noopener">tài liệu chính thức của Codex</a>; cách <code>AGENTS.md</code> ở trên vẫn là cách dự phòng.</p>
+  </div>
+  <div class="tabpanel" data-panel="manual" hidden>
+    <ol>
+      <li>Tải <a href="https://github.com/darkend16987/inno-ai-coding-guide/archive/refs/heads/main.zip">bản ZIP của repo</a> và giải nén.</li>
+      <li>Chép thư mục <code>skills\careful-engineering</code> vào <code>%USERPROFILE%\.claude\skills\</code> (tạo thư mục nếu chưa có).</li>
+      <li>Kết quả phải là <code>%USERPROFILE%\.claude\skills\careful-engineering\SKILL.md</code>.</li>
+    </ol>
+  </div>
+  <div class="warning">Chỉ chạy lệnh <code>irm … | iex</code> khi bạn tin nguồn của nó. Muốn xem trước script làm gì: mở <a href="install.ps1">install.ps1</a> — nó chỉ tải ZIP của repo này từ GitHub, sao lưu bản cũ, chép thư mục skill, rồi kiểm tra <code>SKILL.md</code> có mặt.</div>
+</section>
+
+<section class="section" id="workflow">
+  <h2>Quy trình 8 pha mà skill bắt AI làm theo</h2>
+  <p>Mỗi pha có một <strong>phép kiểm</strong> — AI chỉ chuyển pha khi kiểm xong. Việc vặt (sửa chính tả, một dòng hiển nhiên) được rút gọn, nhưng <strong>pha 4 và pha 6 không bao giờ bỏ</strong>.</p>
+  <div class="phases">
+    <div class="phase"><b>0 · Định hướng</b><small>Đọc CLAUDE.md, sổ bất biến, handoff gần nhất; <code>git status</code>; grep mọi nơi bị ảnh hưởng.</small><div class="v">✓ Liệt kê được file/điểm chạm và luật liên quan</div></div>
+    <div class="phase"><b>1 · Hiểu đúng yêu cầu</b><small>Viết lại yêu cầu + tiêu chí thành công đo được. Mơ hồ thật ⇒ hỏi. Lỗi ⇒ tái hiện có chủ đích.</small><div class="v">✓ Có số đo "trước khi sửa"</div></div>
+    <div class="phase"><b>2 · Thiết kế & kế hoạch</b><small>Nguyên nhân gốc, phương án ít thay đổi nhất, các bước kèm cách kiểm. Việc lớn ⇒ memo kế hoạch, chia đợt.</small><div class="v">✓ Mỗi bước có verify</div></div>
+    <div class="phase"><b>3 · Thực hiện</b><small>Chạy test trước khi sửa; sửa đúng chỗ, đúng style; không thêm ngoài kế hoạch.</small><div class="v">✓ Cú pháp + test liên quan sau mỗi bước</div></div>
+    <div class="phase"><b>4 · Kiểm chứng</b><small>Test mới phải ĐỎ được (đột biến); toàn bộ lưới test; probe trên app thật, so với mã cũ.</small><div class="v">✓ "54/54 test · probe 15/15 (mã cũ đỏ 9/15)"</div></div>
+    <div class="phase"><b>5 · Ghi sổ</b><small>Sổ bất biến (luật + "Vỡ khi:"), ma trận test, tài liệu người dùng, memo handoff.</small><div class="v">✓ Phiên sau đọc là làm tiếp được</div></div>
+    <div class="phase"><b>6 · Commit & push</b><small>Một việc một commit; message ghi ra file rồi <code>git commit -F</code>; kiểm lại tiếng Việt; push khi được bảo.</small><div class="v">✓ <code>git log -1</code> không có ký tự vỡ</div></div>
+    <div class="phase"><b>7 · Deploy</b><small>Cổng test xanh, artefact tươi, bump version, build nền, kiểm file trên đĩa, thử chính bản phát hành.</small><div class="v">✓ Đo trạng thái thật sau deploy</div></div>
+  </div>
+  <h3>Luật vàng</h3>
+  <ul>
+    <li><strong>Không bịa:</strong> tên hàm, file, API, số liệu chỉ nói khi đã đọc/đo trong phiên. Tài liệu và memory là gợi ý <em>nơi tìm</em>, không phải sự thật hôm nay.</li>
+    <li><strong>"Xong" = có số đo</strong> do trạng thái thật sinh ra — không phải "không có lỗi", không phải log in ra "OK".</li>
+    <li><strong>Một việc một commit</strong>; không gộp sửa hành vi với refactor; test xanh trước <em>và</em> sau.</li>
+    <li><strong>Tái hiện lỗi trước khi sửa.</strong> Chưa tái hiện được = chưa hiểu = chưa sửa.</li>
+    <li><strong>Chuỗi có <code>\</code>, backtick, tiếng Việt ⇒ không sửa qua shell</strong> (heredoc, sed): dùng công cụ sửa file hoặc script patch.</li>
+    <li><strong>Thao tác khó lùi / ra ngoài</strong> (push, deploy, xoá, migration production) ⇒ phải có phép rõ ràng.</li>
+  </ul>
+  <p>Nền tảng: <a href="https://github.com/multica-ai/andrej-karpathy-skills" target="_blank" rel="noopener">4 nguyên tắc của Andrej Karpathy</a> — nghĩ trước khi code · đơn giản trước · sửa đúng chỗ · chạy theo mục tiêu kiểm chứng được.</p>
+</section>
+
+<section class="section" id="prompts">
+  <h2>Prompt mẫu — sao chép, sửa phần &lt;…&gt;</h2>
+  <div class="prompt"><h4>1. Làm quen một repo (chưa sửa gì)</h4><p id="p1">Dùng skill careful-engineering, pha 0. Đọc CLAUDE.md / README / cấu trúc thư mục và giải thích bằng tiếng Việt: dự án làm gì, công nghệ, cách chạy và chạy test, các file quan trọng, những chỗ dễ vỡ. Chỉ đọc và báo cáo — chưa sửa file nào. Chỗ nào không chắc thì nói là không chắc.</p><button class="btn copy" data-copy-target="p1">Sao chép</button></div>
+  <div class="prompt"><h4>2. Làm một tính năng</h4><p id="p2">Dùng skill careful-engineering để làm: &lt;mô tả tính năng&gt;.
+Trước khi sửa: viết lại yêu cầu bằng lời của bạn + tiêu chí thành công đo được, các file sẽ chạm, kế hoạch từng bước kèm cách kiểm chứng, và những gì tuyệt đối không được đổi. Chỗ nào mơ hồ thì hỏi tôi (kèm phương án bạn khuyến nghị). Chờ tôi duyệt kế hoạch rồi mới sửa.
+Khi làm: test trước và sau, test mới phải đỏ được, chạy thử trên app thật, báo cáo bằng số đo và nói rõ phần nào chưa kiểm.</p><button class="btn copy" data-copy-target="p2">Sao chép</button></div>
+  <div class="prompt"><h4>3. Sửa một lỗi</h4><p id="p3">Dùng skill careful-engineering. Lỗi: &lt;mô tả triệu chứng, cách bấm để thấy lỗi&gt;.
+Bắt buộc: (1) tái hiện lỗi có chủ đích và ghi số đo trước khi sửa; (2) tìm nguyên nhân gốc, không vá triệu chứng; (3) viết test tái hiện lỗi — phải đỏ trên mã cũ; (4) sửa; (5) chạy toàn bộ test + thử trên app thật, so với mã cũ; (6) ghi một mục vào sổ chống hồi quy. Không sửa gì ngoài phạm vi lỗi này — thấy lỗi khác thì báo riêng.</p><button class="btn copy" data-copy-target="p3">Sao chép</button></div>
+  <div class="prompt"><h4>4. Commit (chưa push)</h4><p id="p4">Commit thay đổi vừa rồi theo quy ước của repo (xem CLAUDE.md: có dấu hay không dấu). Stage đúng từng file của việc này, không commit secret / build output. Viết message ra file rồi git commit -F; thân message nêu nguyên nhân, cách sửa, số đo kiểm chứng và phần chưa kiểm. Commit xong đọc lại git log -1 để chắc tiếng Việt không bị vỡ. Chưa push.</p><button class="btn copy" data-copy-target="p4">Sao chép</button></div>
+  <div class="prompt"><h4>5. Kết thúc phiên — bàn giao</h4><p id="p5">Cập nhật memo bàn giao (docs/HANDOFF.md, khối mới nhất ở trên cùng): đã làm gì (commit + số đo), nghiệm thu, trạng thái git/deploy, phần CHƯA kiểm, việc tôi cần làm, bước kế tiếp, quyết định bạn tự làm mà phiên sau có thể đảo, lỗi của chính bạn trong phiên và luật rút ra.</p><button class="btn copy" data-copy-target="p5">Sao chép</button></div>
+  <div class="prompt"><h4>6. Khởi tạo dự án mới</h4><p id="p6">Dùng skill careful-engineering. Khởi tạo dự án &lt;tên&gt; bằng &lt;công nghệ&gt; trong thư mục hiện tại: tạo CLAUDE.md theo mẫu https://darkend16987.github.io/inno-ai-coding-guide/starter/CLAUDE.md (điền đúng lệnh chạy và test), .gitignore phù hợp, docs/HANDOFF.md, một test chạy được ngay, và README ngắn. Chưa viết tính năng. Cuối cùng liệt kê file đã tạo và lệnh để tôi kiểm tra.</p><button class="btn copy" data-copy-target="p6">Sao chép</button></div>
+</section>
+
+<section class="section" id="newproject">
+  <h2>Checklist: bắt đầu một phần mềm / tool mới với GitHub + AI</h2>
+  <div class="checkgroup" data-key="newproject">
+    <label class="check"><input type="checkbox"><span><strong>Tạo repo Private</strong> bằng GitHub Desktop (<code>File → New Repository</code> → <code>Publish</code>, tích <em>Keep this code private</em>). Xem <a href="guides/github-desktop-claude-code-codex.html#part4">Phần 4 của hướng dẫn</a>.</span></label>
+    <label class="check"><input type="checkbox"><span><strong>Chép bộ starter</strong>: <a href="starter/.gitignore"><code>.gitignore</code></a>, <a href="starter/CLAUDE.md"><code>CLAUDE.md</code></a>, <a href="starter/AGENTS.md"><code>AGENTS.md</code></a> (nếu dùng Codex) vào gốc repo; điền tên dự án, lệnh chạy, lệnh test.</span></label>
+    <label class="check"><input type="checkbox"><span><strong>Cài skill</strong> cho máy hoặc cho repo (<a href="#install">mục Cài skill</a>).</span></label>
+    <label class="check"><input type="checkbox"><span><strong>Commit đầu tiên</strong> chỉ gồm khung dự án + một test chạy được (prompt mẫu 6), rồi Push.</span></label>
+    <label class="check"><input type="checkbox"><span><strong>Mỗi tính năng một branch</strong> (<code>feature/ten-tinh-nang</code>); giao việc bằng prompt mẫu 2; duyệt kế hoạch trước khi AI sửa.</span></label>
+    <label class="check"><input type="checkbox"><span><strong>Review diff trong GitHub Desktop</strong> từng file AI sửa; chạy thử; chỉ commit những file đúng việc.</span></label>
+    <label class="check"><input type="checkbox"><span><strong>Push → Pull Request → merge</strong> vào <code>main</code> khi test xanh và đã chạy thử.</span></label>
+    <label class="check"><input type="checkbox"><span><strong>Cuối phiên</strong>: AI cập nhật <code>docs/HANDOFF.md</code> (prompt mẫu 5) — người sau (hoặc phiên AI sau) đọc là làm tiếp được.</span></label>
+    <label class="check"><input type="checkbox"><span><strong>Không bao giờ commit</strong> mật khẩu, API key, <code>.env</code> thật, dữ liệu khách hàng. Lỡ commit ⇒ đổi key ngay, rồi mới xử lý lịch sử.</span></label>
+    <div class="progress"><div></div></div><div class="progresslabel"></div>
+    <button class="btn resetcheck" type="button" style="margin-top:8px">Đặt lại checklist</button>
+  </div>
+</section>
+
+<section class="section" id="skill">
+  <h2>Đọc skill ngay trên trang</h2>
+  <p>Nội dung dưới đây được nạp trực tiếp từ thư mục <a href="https://github.com/darkend16987/inno-ai-coding-guide/tree/main/skills/careful-engineering"><code>skills/careful-engineering</code></a> của repo — luôn là bản mới nhất.</p>
+  <div class="viewer">
+    <div class="filelist" id="filelist">
+      <div class="grp">Skill</div>
+      <button data-file="SKILL.md">SKILL.md — quy trình</button>
+      <div class="grp">References</div>
+      <button data-file="references/measurement.md">Đo trước khi kết luận</button>
+      <button data-file="references/testing-net.md">Lưới test & đột biến</button>
+      <button data-file="references/memo-handoff.md">Memo & handoff</button>
+      <button data-file="references/commit-deploy.md">Commit & deploy</button>
+      <button data-file="references/windows-unicode.md">Windows & Unicode</button>
+      <button data-file="references/asking-the-owner.md">Hỏi & báo cáo</button>
+      <button data-file="references/data-migration.md">Dữ liệu & migration</button>
+      <div class="grp">Templates</div>
+      <button data-file="templates/patch.js">patch.js</button>
+      <button data-file="templates/mutate.js">mutate.js</button>
+    </div>
+    <article class="md" id="md"><p>Chọn một file bên trái.</p></article>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <h2>Hỏi đáp</h2>
+  <details><summary>Skill có làm AI chậm hơn không?</summary><div>Có, với việc lớn — AI sẽ đọc kỹ, lập kế hoạch và kiểm chứng trước khi báo xong. Đổi lại là ít phải làm lại, ít lỗi lọt lên bản chính. Với việc vặt, skill cho phép rút gọn.</div></details>
+  <details><summary>Tôi đã có skill karpathy-guidelines, có xung đột không?</summary><div>Không. careful-engineering kế thừa nguyên 4 nguyên tắc đó và thêm quy trình + bài học thực tế. Có thể giữ cả hai.</div></details>
+  <details><summary>AI vẫn hỏi lại tôi nhiều không?</summary><div>Skill dặn AI chỉ hỏi khi yêu cầu có từ hai cách hiểu dẫn tới kết quả khác nhau mà code không trả lời được, hoặc trước thao tác khó lùi (push, deploy, xoá). Còn lại AI nêu giả định một dòng rồi làm.</div></details>
+  <details><summary>Commit message nên có dấu tiếng Việt không?</summary><div>Theo quy ước của từng repo (ghi trong CLAUDE.md). Có repo cấm dấu vì PowerShell làm vỡ mã hoá. Dù chọn cách nào: ghi message ra file rồi <code>git commit -F</code>, sau đó xem lại <code>git log -1</code> — thấy <code>â€</code> hoặc <code>Ã</code> là vỡ, sửa trước khi push.</div></details>
+  <details><summary>Cập nhật skill khi repo này có bản mới?</summary><div>Chạy lại lệnh cài. Bản đang có được sao lưu thành <code>careful-engineering.bak-&lt;ngày giờ&gt;</code> trước khi thay.</div></details>
+  <details><summary>Muốn góp thêm bài học / bẫy mới?</summary><div>Mở Pull Request vào repo, sửa file trong <code>skills/careful-engineering/references/</code>. Ghi bài học dưới dạng: chuyện gì đã xảy ra (đã đo), luật rút ra, cách áp dụng. Không đưa số liệu / tên khách hàng / dữ liệu nội bộ vào.</div></details>
+</section>
+
+<footer class="foot">AI Coding Guide • skill careful-engineering • 10/2026<br><small>Lệnh cài và giao diện công cụ có thể thay đổi theo phiên bản; ưu tiên tài liệu chính thức của GitHub, Anthropic, OpenAI.</small></footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<script>
+(function () {
+  // tabs
+  document.querySelectorAll(".tabs").forEach(function (root) {
+    root.querySelectorAll("button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        root.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-selected", String(x === b)); });
+        root.parentElement.querySelectorAll(".tabpanel").forEach(function (p) { p.hidden = p.dataset.panel !== b.dataset.tab; });
+      });
+    });
+  });
+  // copy buttons
+  document.querySelectorAll(".copy").forEach(function (b) {
+    b.addEventListener("click", async function () {
+      var t = document.getElementById(b.dataset.copyTarget);
+      if (!t) return;
+      var txt = t.innerText.trim();
+      try { await navigator.clipboard.writeText(txt); }
+      catch (e) { var ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); }
+      var o = b.textContent; b.textContent = "✓ Đã sao chép"; setTimeout(function () { b.textContent = o; }, 1600);
+    });
+  });
+  // checklist (per-viewer convenience only; works without storage)
+  document.querySelectorAll(".checkgroup").forEach(function (g) {
+    var key = "aiguide-" + g.dataset.key;
+    var els = Array.prototype.slice.call(g.querySelectorAll("input[type=checkbox]"));
+    try { var old = JSON.parse(localStorage.getItem(key) || "[]"); els.forEach(function (x, i) { x.checked = !!old[i]; }); } catch (e) {}
+    function update() {
+      var n = els.filter(function (x) { return x.checked; }).length;
+      g.querySelector(".progress>div").style.width = (100 * n / els.length) + "%";
+      g.querySelector(".progresslabel").textContent = "Đã xong " + n + "/" + els.length + " bước" + (n === els.length ? " — hoàn tất!" : "");
+      try { localStorage.setItem(key, JSON.stringify(els.map(function (x) { return x.checked; }))); } catch (e) {}
+    }
+    els.forEach(function (x) { x.addEventListener("change", update); });
+    var r = g.querySelector(".resetcheck");
+    if (r) r.addEventListener("click", function () { els.forEach(function (x) { x.checked = false; }); update(); });
+    update();
+  });
+  // skill viewer
+  var BASE = "skills/careful-engineering/";
+  var md = document.getElementById("md");
+  var buttons = Array.prototype.slice.call(document.querySelectorAll("#filelist button"));
+  function esc(s) { return s.replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
+  function resolve(from, rel) {
+    var parts = (from.split("/").slice(0, -1).join("/") + "/" + rel).split("/"), out = [];
+    parts.forEach(function (p) { if (!p || p === ".") return; if (p === "..") out.pop(); else out.push(p); });
+    return out.join("/");
+  }
+  async function show(file, push) {
+    buttons.forEach(function (b) { b.setAttribute("aria-current", String(b.dataset.file === file)); });
+    md.innerHTML = "<p>Đang tải " + esc(file) + "…</p>";
+    try {
+      var res = await fetch(BASE + file, { cache: "no-cache" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      var text = await res.text();
+      var html;
+      if (/\.md$/.test(file) && window.marked && window.DOMPurify) {
+        html = DOMPurify.sanitize(marked.parse(text.replace(/^---\n[\s\S]*?\n---\n/, "")));
+      } else {
+        html = "<pre><code>" + esc(text) + "</code></pre>";
+      }
+      md.innerHTML = html + '<p class="src">Nguồn: <a href="https://github.com/darkend16987/inno-ai-coding-guide/blob/main/' + BASE + esc(file) + '">' + esc(BASE + file) + "</a></p>";
+      md.querySelectorAll("a[href]").forEach(function (a) {
+        var h = a.getAttribute("href");
+        if (/^[a-z]+:/i.test(h) || h.charAt(0) === "#") { if (/^https?:/i.test(h)) { a.target = "_blank"; a.rel = "noopener"; } return; }
+        var target = resolve(file, h.split("#")[0]);
+        if (buttons.some(function (b) { return b.dataset.file === target; })) {
+          a.addEventListener("click", function (e) { e.preventDefault(); show(target, true); document.getElementById("skill").scrollIntoView(); });
+        }
+      });
+      if (push) { try { history.replaceState(null, "", "#skill=" + file); } catch (e) {} }
+    } catch (e) {
+      md.innerHTML = "<p>Không tải được <code>" + esc(file) + "</code> (" + esc(String(e.message || e)) + "). Trang cần được mở qua http(s) — ví dụ trên GitHub Pages — chứ không mở trực tiếp file trên máy. Xem bản gốc trên <a href='https://github.com/darkend16987/inno-ai-coding-guide/tree/main/" + BASE + "'>GitHub</a>.</p>";
+    }
+  }
+  buttons.forEach(function (b) { b.addEventListener("click", function () { show(b.dataset.file, true); }); });
+  var m = location.hash.match(/^#skill=(.+)$/);
+  show(m && buttons.some(function (b) { return b.dataset.file === m[1]; }) ? m[1] : "SKILL.md", false);
+  if (m) document.getElementById("skill").scrollIntoView();
+})();
+</script>
+</body>
+</html>
