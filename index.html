@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light">
 <title>Làm phần mềm với AI — bộ skill & hướng dẫn GitHub cho team</title>
-<meta name="description" content="Bộ skill careful-engineering cho Claude Code / Codex và hướng dẫn GitHub Desktop: quy trình làm phần mềm với AI không hallucinate, không regression, có test, memo, handoff.">
+<meta name="description" content="Bộ skill careful-engineering và caveman cho Claude Code / Codex, kèm hướng dẫn GitHub Desktop: quy trình làm phần mềm với AI không hallucinate, không regression, có test, memo, handoff — và trả lời gọn, ít token.">
 <style>
 :root{--bg:#f6f8fb;--paper:#fff;--ink:#172333;--muted:#64748b;--blue:#175cd3;--line:#e2e8f0;--soft:#eff6ff;--shadow:0 12px 36px rgba(15,23,42,.06)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
@@ -70,14 +70,14 @@ summary{padding:12px 2px;cursor:pointer;font-weight:650}details>div{padding:0 2p
 </head>
 <body>
 <nav class="topnav"><div class="in"><b>AI Coding Guide</b>
-<a href="#start">Bắt đầu</a><a href="#install">Cài skill</a><a href="#workflow">Quy trình</a><a href="#prompts">Prompt mẫu</a><a href="#newproject">Dự án mới</a><a href="#skill">Đọc skill</a><a href="#faq">Hỏi đáp</a>
+<a href="#start">Bắt đầu</a><a href="#install">Cài skill</a><a href="#workflow">Quy trình</a><a href="#caveman">Caveman</a><a href="#prompts">Prompt mẫu</a><a href="#newproject">Dự án mới</a><a href="#skill">Đọc skill</a><a href="#faq">Hỏi đáp</a>
 </div></nav>
 <div class="wrap">
 
 <header class="hero">
   <div class="eyebrow">Cẩm nang nội bộ cho team</div>
   <h1>Làm phần mềm & tool mới với AI —<br>đúng, chắc, không hồi quy</h1>
-  <p>Hai thứ mỗi thành viên cần: <strong>(1)</strong> biết dùng GitHub + GitHub Desktop + Claude Code / Codex, và <strong>(2)</strong> cài bộ skill <code style="background:#ffffff22;color:#fff">careful-engineering</code> để AI agent làm việc theo một quy trình có kế hoạch, có test, có memo bàn giao — rút ra từ những lỗi đã gặp thật khi làm các dự án của chúng ta.</p>
+  <p>Hai thứ mỗi thành viên cần: <strong>(1)</strong> biết dùng GitHub + GitHub Desktop + Claude Code / Codex, và <strong>(2)</strong> cài bộ skill <code style="background:#ffffff22;color:#fff">careful-engineering</code> để AI agent làm việc theo một quy trình có kế hoạch, có test, có memo bàn giao — rút ra từ những lỗi đã gặp thật khi làm các dự án của chúng ta. Kèm theo là skill <code style="background:#ffffff22;color:#fff">caveman</code> (bật khi cần) để AI trả lời gọn, bớt chữ thừa trong khung chat.</p>
   <div class="tagbar"><span class="tag">Windows 10/11</span><span class="tag">Claude Code</span><span class="tag">OpenAI Codex</span><span class="tag">GitHub Desktop</span><span class="tag">Tiếng Việt</span></div>
 </header>
 
@@ -85,14 +85,15 @@ summary{padding:12px 2px;cursor:pointer;font-weight:650}details>div{padding:0 2p
   <h2>Bắt đầu từ đâu?</h2>
   <div class="cards">
     <div class="card"><div class="num">BƯỚC 1 · MỘT LẦN</div><h3>Cài & dùng GitHub, AI agent</h3><p>Tạo tài khoản GitHub, cài GitHub Desktop, VS Code, Claude Code / Codex, kết nối dự án với repo, Commit / Push / Pull. Dành cho người chưa từng dùng Git.</p><a class="btn primary" href="guides/github-desktop-claude-code-codex.html">Mở hướng dẫn A–Z →</a></div>
-    <div class="card"><div class="num">BƯỚC 2 · MỘT LẦN</div><h3>Cài skill careful-engineering</h3><p>Một lệnh PowerShell. Sau đó mọi phiên Claude Code trên máy bạn đều có quy trình 8 pha: đọc → hiểu → kế hoạch → làm → kiểm chứng → ghi sổ → commit → deploy.</p><a class="btn primary" href="#install">Cài ngay →</a></div>
+    <div class="card"><div class="num">BƯỚC 2 · MỘT LẦN</div><h3>Cài bộ skill</h3><p>Một lệnh PowerShell. Sau đó mọi phiên Claude Code trên máy bạn đều có quy trình 8 pha của <code>careful-engineering</code> (đọc → hiểu → kế hoạch → làm → kiểm chứng → ghi sổ → commit → deploy) và lệnh <code>/caveman</code> khi muốn AI trả lời gọn.</p><a class="btn primary" href="#install">Cài ngay →</a></div>
     <div class="card"><div class="num">HẰNG NGÀY</div><h3>Giao việc cho AI đúng cách</h3><p>Dùng prompt mẫu: bắt AI viết lại yêu cầu + kế hoạch có bước kiểm chứng trước khi sửa, tái hiện lỗi trước khi sửa lỗi, báo cáo bằng số đo.</p><a class="btn primary" href="#prompts">Xem prompt mẫu →</a></div>
   </div>
   <div class="tip"><strong>Nhớ một câu:</strong> AI sửa file trên máy bạn — <strong>bạn</strong> là người review diff, chạy thử, rồi mới Commit → Push. Skill giúp AI tự kiểm chứng kỹ hơn, nhưng không thay được bước review của bạn.</div>
 </section>
 
 <section class="section" id="install">
-  <h2>Cài skill careful-engineering</h2>
+  <h2>Cài bộ skill</h2>
+  <p>Bộ skill gồm <code>careful-engineering</code> (quy trình làm việc) và nhóm caveman: <code>caveman</code>, <code>ultracave</code>, <code>megacave</code> (giọng trả lời gọn — <a href="#caveman">xem mục Caveman</a>). Lệnh cài mặc định chép cả bốn.</p>
   <div class="tabs" role="tablist" aria-label="Cách cài">
     <button role="tab" aria-selected="true" data-tab="user">Claude Code — cho cả máy (khuyến nghị)</button>
     <button role="tab" aria-selected="false" data-tab="project">Claude Code — cho một repo</button>
@@ -102,13 +103,15 @@ summary{padding:12px 2px;cursor:pointer;font-weight:650}details>div{padding:0 2p
   <div class="tabpanel" data-panel="user">
     <p>Mở <strong>PowerShell</strong> (không cần quyền Admin) và chạy:</p>
     <div class="copyline"><button class="btn copy" data-copy-target="inst-user">Sao chép</button><pre><code id="inst-user">irm https://darkend16987.github.io/inno-ai-coding-guide/install.ps1 | iex</code></pre></div>
-    <p>Skill được chép vào <code>%USERPROFILE%\.claude\skills\careful-engineering</code>. Nếu đã có bản cũ, bản cũ được đổi tên thành <code>…\careful-engineering.bak-&lt;ngày giờ&gt;</code> (không mất).</p>
-    <p><strong>Kiểm tra:</strong> mở một phiên Claude Code <em>mới</em>, gõ <code>/careful-engineering</code> hoặc hỏi <em>"Which skills are available?"</em> — phải thấy <code>careful-engineering</code>.</p>
+    <p>Mỗi skill được chép vào <code>%USERPROFILE%\.claude\skills\&lt;tên skill&gt;</code>. Nếu đã có bản cũ, bản cũ được đổi tên thành <code>…\&lt;tên skill&gt;.bak-&lt;ngày giờ&gt;</code> (không mất).</p>
+    <p>Chỉ muốn cài một vài skill: thêm <code>-Skill</code> (cách nhau bằng dấu phẩy):</p>
+    <div class="copyline"><button class="btn copy" data-copy-target="inst-one">Sao chép</button><pre><code id="inst-one">&amp; ([scriptblock]::Create((irm https://darkend16987.github.io/inno-ai-coding-guide/install.ps1))) -Skill careful-engineering,caveman</code></pre></div>
+    <p><strong>Kiểm tra:</strong> mở một phiên Claude Code <em>mới</em>, gõ <code>/careful-engineering</code> hoặc <code>/caveman</code>, hoặc hỏi <em>"Which skills are available?"</em> — phải thấy các skill vừa cài.</p>
   </div>
   <div class="tabpanel" data-panel="project" hidden>
     <p>Dùng khi muốn skill <strong>đi theo repo</strong> (ai clone repo cũng có). Mở PowerShell <strong>tại thư mục gốc của repo</strong> rồi chạy:</p>
     <div class="copyline"><button class="btn copy" data-copy-target="inst-proj">Sao chép</button><pre><code id="inst-proj">&amp; ([scriptblock]::Create((irm https://darkend16987.github.io/inno-ai-coding-guide/install.ps1))) -Project</code></pre></div>
-    <p>Skill vào <code>.claude\skills\careful-engineering</code> của repo. Commit thư mục đó bằng GitHub Desktop như mọi file khác.</p>
+    <p>Skill vào <code>.claude\skills\&lt;tên skill&gt;</code> của repo. Commit thư mục đó bằng GitHub Desktop như mọi file khác. Có thể ghép <code>-Project -Skill careful-engineering</code> để chỉ đưa skill quy trình vào repo — caveman là sở thích cá nhân, nên cài cho máy.</p>
   </div>
   <div class="tabpanel" data-panel="codex" hidden>
     <p>Codex và nhiều agent khác đọc file <code>AGENTS.md</code> ở gốc repo. Cách chắc chắn chạy được với mọi phiên bản:</p>
@@ -121,11 +124,11 @@ summary{padding:12px 2px;cursor:pointer;font-weight:650}details>div{padding:0 2p
   <div class="tabpanel" data-panel="manual" hidden>
     <ol>
       <li>Tải <a href="https://github.com/darkend16987/inno-ai-coding-guide/archive/refs/heads/main.zip">bản ZIP của repo</a> và giải nén.</li>
-      <li>Chép thư mục <code>skills\careful-engineering</code> vào <code>%USERPROFILE%\.claude\skills\</code> (tạo thư mục nếu chưa có).</li>
-      <li>Kết quả phải là <code>%USERPROFILE%\.claude\skills\careful-engineering\SKILL.md</code>.</li>
+      <li>Chép các thư mục trong <code>skills\</code> (<code>careful-engineering</code>, <code>caveman</code>, <code>ultracave</code>, <code>megacave</code>) vào <code>%USERPROFILE%\.claude\skills\</code> (tạo thư mục nếu chưa có).</li>
+      <li>Kết quả phải là <code>%USERPROFILE%\.claude\skills\careful-engineering\SKILL.md</code>, <code>…\caveman\SKILL.md</code>, v.v.</li>
     </ol>
   </div>
-  <div class="warning">Chỉ chạy lệnh <code>irm … | iex</code> khi bạn tin nguồn của nó. Muốn xem trước script làm gì: mở <a href="install.ps1">install.ps1</a> — nó chỉ tải ZIP của repo này từ GitHub, sao lưu bản cũ, chép thư mục skill, rồi kiểm tra <code>SKILL.md</code> có mặt.</div>
+  <div class="warning">Chỉ chạy lệnh <code>irm … | iex</code> khi bạn tin nguồn của nó. Muốn xem trước script làm gì: mở <a href="install.ps1">install.ps1</a> — nó chỉ tải ZIP của repo này từ GitHub, sao lưu bản cũ, chép thư mục skill, rồi kiểm tra <code>SKILL.md</code> có mặt. Nó <strong>không</strong> cài hook, plugin hay chương trình nào của dự án caveman gốc.</div>
 </section>
 
 <section class="section" id="workflow">
@@ -151,6 +154,28 @@ summary{padding:12px 2px;cursor:pointer;font-weight:650}details>div{padding:0 2p
     <li><strong>Thao tác khó lùi / ra ngoài</strong> (push, deploy, xoá, migration production) ⇒ phải có phép rõ ràng.</li>
   </ul>
   <p>Nền tảng: <a href="https://github.com/multica-ai/andrej-karpathy-skills" target="_blank" rel="noopener">4 nguyên tắc của Andrej Karpathy</a> — nghĩ trước khi code · đơn giản trước · sửa đúng chỗ · chạy theo mục tiêu kiểm chứng được.</p>
+</section>
+
+<section class="section" id="caveman">
+  <h2>Skill caveman — AI trả lời gọn, đủ ý</h2>
+  <p><a href="https://github.com/juliusbrussee/caveman" target="_blank" rel="noopener">caveman</a> (Julius Brussee, Apache-2.0) là một <strong>giọng trả lời</strong>: nói kết quả trước, bỏ câu chào, rào đón, tóm tắt lại và câu mời. Code, lệnh, đường dẫn, con số và thông báo lỗi giữ <strong>nguyên văn</strong>. Skill chỉ đổi cách AI viết trong khung chat, không đổi cách AI làm việc. Vì vậy dùng chung với <code>careful-engineering</code> được.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Lệnh</th><th>Tác dụng</th></tr>
+    <tr><td><code>/caveman</code></td><td>Giọng gọn (mặc định). Giữ đủ câu khi bỏ chữ có thể làm hiểu sai.</td></tr>
+    <tr><td><code>/ultracave</code></td><td>Gọn tối đa: câu cụt, mỗi ý một lần. Hợp với người đã quen dự án.</td></tr>
+    <tr><td><code>/caveman status</code></td><td>Cho biết chế độ đang bật, không đổi gì.</td></tr>
+    <tr><td><code>stop caveman</code> hoặc <code>normal mode</code></td><td>Trở lại cách viết bình thường.</td></tr>
+    <tr><td><code>/megacave</code></td><td>Trả lời bằng Hán văn cổ. Team mình không cần; có trong bộ cài chỉ để lệnh <code>/caveman wenyan</code> của bản gốc không bị lỗi.</td></tr>
+  </table></div>
+  <h3>Khi nào nên bật</h3>
+  <ul>
+    <li><strong>Nên:</strong> phiên làm việc dài, bạn đã hiểu dự án và chỉ cần AI báo kết quả: lỗi ở đâu, sửa gì, test ra sao.</li>
+    <li><strong>Không nên:</strong> khi đang học, khi nhờ AI giải thích một khái niệm, hoặc khi người đọc kết quả là người ngoài team. Lúc đó lời giải thích đầy đủ đáng giá hơn số chữ tiết kiệm được.</li>
+  </ul>
+  <h3>Những gì caveman không cắt</h3>
+  <p>Skill tự quay về câu đầy đủ khi: cảnh báo bảo mật, xin xác nhận thao tác khó lùi (push, deploy, xoá), liệt kê các bước theo thứ tự, bạn hỏi lại vì chưa hiểu, và AI hỏi bạn. Mọi thứ được <strong>ghi ra ngoài khung chat</strong> cũng viết bình thường: code, comment, commit message, tài liệu, memo bàn giao, sổ bất biến. Nghĩa là các pha 5–6 của careful-engineering không bị ảnh hưởng. Skill viết theo ngôn ngữ của bạn: hỏi tiếng Việt thì trả lời tiếng Việt, chỉ gọn hơn.</p>
+  <div class="warning"><strong>Đừng kỳ vọng tiết kiệm nhiều token.</strong> Chính tác giả đã đo một lần (Claude Opus 5.5, 10 câu hỏi, chỉ đo độ dài): <code>caveman</code> chỉ ngắn hơn câu lệnh <em>"Answer concisely."</em> khoảng 3% — nằm trong sai số; <code>ultracave</code> ngắn hơn khoảng 35%. Tác giả không công bố số đo nào về việc chất lượng câu trả lời có giữ nguyên hay không. Lợi ích chính là <strong>dễ đọc hơn</strong>, không phải rẻ hơn. Khi AI báo cáo theo careful-engineering, vẫn đòi đủ số đo và phần <em>chưa kiểm</em>. Caveman làm câu ngắn lại, nhưng không được bỏ nội dung.</div>
+  <p>Bộ cài của trang này chỉ chép các file <code>SKILL.md</code>. Bản cài đầy đủ của dự án gốc còn có hook (tự bật caveman ở mọi phiên), proxy và nhiều công cụ khác. Muốn dùng những thứ đó thì đọc <a href="https://github.com/juliusbrussee/caveman" target="_blank" rel="noopener">README của dự án gốc</a> và tự quyết định.</p>
 </section>
 
 <section class="section" id="prompts">
@@ -185,22 +210,26 @@ Bắt buộc: (1) tái hiện lỗi có chủ đích và ghi số đo trước k
 
 <section class="section" id="skill">
   <h2>Đọc skill ngay trên trang</h2>
-  <p>Nội dung dưới đây được nạp trực tiếp từ thư mục <a href="https://github.com/darkend16987/inno-ai-coding-guide/tree/main/skills/careful-engineering"><code>skills/careful-engineering</code></a> của repo — luôn là bản mới nhất.</p>
+  <p>Nội dung dưới đây được nạp trực tiếp từ thư mục <a href="https://github.com/darkend16987/inno-ai-coding-guide/tree/main/skills"><code>skills/</code></a> của repo — luôn là bản mới nhất.</p>
   <div class="viewer">
     <div class="filelist" id="filelist">
-      <div class="grp">Skill</div>
-      <button data-file="SKILL.md">SKILL.md — quy trình</button>
-      <div class="grp">References</div>
-      <button data-file="references/measurement.md">Đo trước khi kết luận</button>
-      <button data-file="references/testing-net.md">Lưới test & đột biến</button>
-      <button data-file="references/memo-handoff.md">Memo & handoff</button>
-      <button data-file="references/commit-deploy.md">Commit & deploy</button>
-      <button data-file="references/windows-unicode.md">Windows & Unicode</button>
-      <button data-file="references/asking-the-owner.md">Hỏi & báo cáo</button>
-      <button data-file="references/data-migration.md">Dữ liệu & migration</button>
-      <div class="grp">Templates</div>
-      <button data-file="templates/patch.js">patch.js</button>
-      <button data-file="templates/mutate.js">mutate.js</button>
+      <div class="grp">careful-engineering</div>
+      <button data-file="careful-engineering/SKILL.md">SKILL.md — quy trình</button>
+      <div class="grp">careful-engineering · references</div>
+      <button data-file="careful-engineering/references/measurement.md">Đo trước khi kết luận</button>
+      <button data-file="careful-engineering/references/testing-net.md">Lưới test & đột biến</button>
+      <button data-file="careful-engineering/references/memo-handoff.md">Memo & handoff</button>
+      <button data-file="careful-engineering/references/commit-deploy.md">Commit & deploy</button>
+      <button data-file="careful-engineering/references/windows-unicode.md">Windows & Unicode</button>
+      <button data-file="careful-engineering/references/asking-the-owner.md">Hỏi & báo cáo</button>
+      <button data-file="careful-engineering/references/data-migration.md">Dữ liệu & migration</button>
+      <div class="grp">careful-engineering · templates</div>
+      <button data-file="careful-engineering/templates/patch.js">patch.js</button>
+      <button data-file="careful-engineering/templates/mutate.js">mutate.js</button>
+      <div class="grp">caveman</div>
+      <button data-file="caveman/SKILL.md">caveman — SKILL.md</button>
+      <button data-file="caveman/README.md">caveman — giới thiệu</button>
+      <button data-file="ultracave/SKILL.md">ultracave — SKILL.md</button>
     </div>
     <article class="md" id="md"><p>Chọn một file bên trái.</p></article>
   </div>
@@ -212,11 +241,12 @@ Bắt buộc: (1) tái hiện lỗi có chủ đích và ghi số đo trước k
   <details><summary>Tôi đã có skill karpathy-guidelines, có xung đột không?</summary><div>Không. careful-engineering kế thừa nguyên 4 nguyên tắc đó và thêm quy trình + bài học thực tế. Có thể giữ cả hai.</div></details>
   <details><summary>AI vẫn hỏi lại tôi nhiều không?</summary><div>Skill dặn AI chỉ hỏi khi yêu cầu có từ hai cách hiểu dẫn tới kết quả khác nhau mà code không trả lời được, hoặc trước thao tác khó lùi (push, deploy, xoá). Còn lại AI nêu giả định một dòng rồi làm.</div></details>
   <details><summary>Commit message nên có dấu tiếng Việt không?</summary><div>Theo quy ước của từng repo (ghi trong CLAUDE.md). Có repo cấm dấu vì PowerShell làm vỡ mã hoá. Dù chọn cách nào: ghi message ra file rồi <code>git commit -F</code>, sau đó xem lại <code>git log -1</code> — thấy <code>â€</code> hoặc <code>Ã</code> là vỡ, sửa trước khi push.</div></details>
-  <details><summary>Cập nhật skill khi repo này có bản mới?</summary><div>Chạy lại lệnh cài. Bản đang có được sao lưu thành <code>careful-engineering.bak-&lt;ngày giờ&gt;</code> trước khi thay.</div></details>
+  <details><summary>caveman có làm AI bớt cẩn thận không?</summary><div>Không nên, vì caveman chỉ đổi cách viết trong chat, còn quy trình vẫn do careful-engineering quyết. Nhưng câu càng ngắn càng dễ thiếu chữ "chưa", "không". Nếu thấy báo cáo mơ hồ, gõ <code>stop caveman</code> và hỏi lại. Báo cáo cuối việc lớn nên đọc ở chế độ thường.</div></details>
+  <details><summary>Cập nhật skill khi repo này có bản mới?</summary><div>Chạy lại lệnh cài. Bản đang có được sao lưu thành <code>&lt;tên skill&gt;.bak-&lt;ngày giờ&gt;</code> trước khi thay. caveman trong repo này là bản chép nguyên văn từ dự án gốc (commit ghi trong <code>skills/caveman/NOTICE</code>); team chủ động chép lại khi bản gốc có thay đổi đáng giá.</div></details>
   <details><summary>Muốn góp thêm bài học / bẫy mới?</summary><div>Mở Pull Request vào repo, sửa file trong <code>skills/careful-engineering/references/</code>. Ghi bài học dưới dạng: chuyện gì đã xảy ra (đã đo), luật rút ra, cách áp dụng. Không đưa số liệu / tên khách hàng / dữ liệu nội bộ vào.</div></details>
 </section>
 
-<footer class="foot">AI Coding Guide • skill careful-engineering • 10/2026<br><small>Lệnh cài và giao diện công cụ có thể thay đổi theo phiên bản; ưu tiên tài liệu chính thức của GitHub, Anthropic, OpenAI.</small></footer>
+<footer class="foot">AI Coding Guide • skill careful-engineering &amp; caveman • 10/2026<br><small>Lệnh cài và giao diện công cụ có thể thay đổi theo phiên bản; ưu tiên tài liệu chính thức của GitHub, Anthropic, OpenAI.</small></footer>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
@@ -260,7 +290,7 @@ Bắt buộc: (1) tái hiện lỗi có chủ đích và ghi số đo trước k
     update();
   });
   // skill viewer
-  var BASE = "skills/careful-engineering/";
+  var BASE = "skills/";
   var md = document.getElementById("md");
   var buttons = Array.prototype.slice.call(document.querySelectorAll("#filelist button"));
   function esc(s) { return s.replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
@@ -297,8 +327,11 @@ Bắt buộc: (1) tái hiện lỗi có chủ đích và ghi số đo trước k
     }
   }
   buttons.forEach(function (b) { b.addEventListener("click", function () { show(b.dataset.file, true); }); });
-  var m = location.hash.match(/^#skill=(.+)$/);
-  show(m && buttons.some(function (b) { return b.dataset.file === m[1]; }) ? m[1] : "SKILL.md", false);
+  function known(f) { return buttons.some(function (b) { return b.dataset.file === f; }); }
+  var m = location.hash.match(/^#skill=(.+)$/), want = m && m[1];
+  // Old links (#skill=SKILL.md) predate the multi-skill layout and point into careful-engineering.
+  if (want && !known(want) && known("careful-engineering/" + want)) want = "careful-engineering/" + want;
+  show(want && known(want) ? want : "careful-engineering/SKILL.md", false);
   if (m) document.getElementById("skill").scrollIntoView();
 })();
 </script>
