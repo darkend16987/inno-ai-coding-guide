@@ -12,11 +12,14 @@ trạng thái thật sinh ra**. Mọi luật dưới đây đều đến từ m�
   đảm nên không ai đo lại. Hỏi *ai bảo đảm điều đó?* Nếu câu trả lời là "một lần đo" ⇒ đo lại mỗi
   lần dùng, hoặc biến nó thành **hàng rào chạy được** (script/test), đừng để nó là chú thích.
   *(Đã xảy ra: chú thích "khoá này là vĩnh viễn" — đo lại: khoảng 1/10 số khoá đã trỏ sang bản ghi khác.)*
-- **Không dựng con số đầy đủ từ số đã làm tròn.** `78,830` (đã làm tròn để hiển thị) không cho biết chữ số sau đó.
+- **Không dựng con số đầy đủ từ số đã làm tròn.** `78,83 tỷ` (đã làm tròn để hiển thị) không cho biết chữ số sau đó.
   Cần độ chính xác ⇒ chạy lại truy vấn lấy giá trị thô. Ngưỡng so tương đối (1e-6) che được
   chữ số bịa.
 - Không có công cụ để đo (Docker tắt, không có quyền) ⇒ **nói rõ "chưa đo được"**, đừng lấy
   tài liệu thay số đo.
+- **Giá trị mặc định không phải sự thật đang chạy.** Cổng `3000` trong `.env.example`, timeout mặc định
+  của thư viện, nhánh `main` trong cấu hình mẫu — production có thể đã đặt khác. Phân biệt rõ khi báo:
+  giá trị **cố định trong code** / **mặc định** / **cấu hình được** / **đã quan sát thấy** khi chạy.
 
 ## 2. Một phép đo đơn lẻ không đủ
 

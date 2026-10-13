@@ -9,9 +9,10 @@
 ## 2. Test mới phải có khả năng ĐỎ
 
 Một test không thể fail thì vô giá trị. Sau khi viết test:
-1. Lấy hash file thật (`md5sum f > /tmp/x.md5`).
+1. Lấy hash file thật (`md5sum f > <scratchpad>/x.md5`).
 2. Chạy **đột biến**: làm hỏng có chủ đích từng chỗ test phải bảo vệ (bỏ điều kiện, lệch biên,
-   đảo dấu, quên một trường, quay lại đúng lỗi cũ) → test phải đỏ. Dùng `templates/mutate.js`.
+   đảo dấu, quên một trường, quay lại đúng lỗi cũ) → test phải đỏ. Dùng `templates/mutate.js` —
+   nó chạy test trên mã **chưa** đột biến trước: baseline đỏ thì mọi đột biến "bị bắt" là giả, nên dừng.
 3. **Khôi phục từ bản trong bộ nhớ** (`finally`), KHÔNG `git checkout` (xoá luôn thay đổi chưa commit).
 4. `md5sum -c` ⇒ file về nguyên trạng.
 5. Báo `N/M đột biến bị bắt`. Đột biến sống sót ⇒ làm test chặt hơn, hoặc ghi rõ vì sao đột biến
@@ -35,7 +36,10 @@ Thứ tự ưu tiên:
 ## 4. Probe trên app/hệ thống THẬT
 
 `npm test` xanh **không** đủ để báo "xong" cho thay đổi giao diện / tích hợp. Nói rõ phần nào đã
-probe, phần nào chưa.
+probe, phần nào chưa. Cách khởi động, dấu hiệu sẵn sàng, dựng dữ liệu thử, lấy log, dọn dẹp: đọc
+`docs/RUNBOOK.md` của repo. Chưa có ⇒ tự dò từ repo, và khi đã chạy được thì **ghi lại** vào RUNBOOK
+(chỉ những gì đã thấy chạy thật). Không chạy được app (thiếu dịch vụ, thiếu quyền) ⇒ báo rõ là chưa
+probe và vì sao, đừng thay probe bằng đọc code.
 - Điều khiển bằng **chuột/phím thật** (CDP `Input.dispatchMouseEvent`, `insertText`), không
   gọi thẳng hàm nội bộ — gọi hàm bỏ qua đúng lớp hay lỗi (focus, blur, pointer, layout).
 - Đo **sản phẩm cuối** (file đã lưu, bytes, pixel của bản render riêng — không đọc pixel canvas
@@ -49,13 +53,7 @@ probe, phần nào chưa.
 
 ## 5. Bất biến được ghi thành sổ
 
-Mỗi lỗi đã sửa / luật mới ⇒ một mục trong sổ bất biến của repo (REGRESSION-GUARD, decision log…):
-- mã số (`BI-<n>`), hàm/file, lưới test bảo vệ, số đo trước/sau, **"Vỡ khi:"** (triệu chứng
-  người dùng thấy nếu luật bị phá);
-- một dòng trong **ma trận "đụng gì → test gì"** kèm các bước test tay.
+Mỗi lỗi đã sửa / luật mới ⇒ một mục `BI-<n>` trong sổ bất biến của repo (mẫu: [memo-handoff.md](memo-handoff.md) §2)
++ một dòng ma trận "đụng gì → test gì". Biến luật thành check tự động, chứng minh hai chiều, báo mức
+bảo vệ (máy / hook / CI / chặn merge), và xử lý khi check cấu trúc có sẵn đỏ: [invariants.md](invariants.md).
 Sửa một hàm có `BI-xx` trong chú thích ⇒ đọc mục đó TRƯỚC khi sửa.
-
-## 6. Ba bộ canh cấu trúc: đừng làm chúng im
-
-Nếu repo có test canh cấu trúc (trùng tên toàn cục, hợp đồng IPC, mọi chỗ ghi phải qua undo…),
-thêm code vi phạm ⇒ sửa code theo luật, không nới luật. Thêm phụ thuộc lúc nạp ⇒ thêm luật vào test.

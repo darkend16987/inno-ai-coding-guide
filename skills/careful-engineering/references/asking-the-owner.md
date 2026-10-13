@@ -2,6 +2,9 @@
 
 ## 1. Khi nào PHẢI hỏi trước
 
+Trước hết, đọc đúng **phạm vi được giao**: "xem", "kiểm tra", "review", "giải thích" ⇒ chỉ đọc và báo
+cáo, chưa được sửa file hay chạy lệnh đổi trạng thái. Thấy chỗ cần sửa ⇒ đề xuất, chờ lời.
+
 - Yêu cầu có ≥ 2 cách hiểu dẫn tới **kết quả khác nhau** mà mã / dữ liệu / tài liệu không trả lời được.
 - Câu hỏi về **NGHĨA** hoặc **cơ chế sinh** của dữ liệu nghiệp vụ mà không tìm thấy định nghĩa
   ⇒ hỏi *chỗ tìm* ("định nghĩa cột này nằm ở đâu?"), đừng suy từ dữ liệu.
@@ -47,6 +50,8 @@ loại trông y như nhau và không còn đường lùi.
 ## 5. Báo cáo cuối mỗi việc
 
 - Mở đầu bằng **kết quả** (đã làm gì, đã đo được gì), rồi cách kiểm chứng, rồi việc còn mở.
-- Nói thẳng phần **chưa** kiểm (chưa test tay tiếng Anh, chưa probe ca X) — không làm mờ.
+- Nói thẳng phần **chưa** kiểm (chưa test tay tiếng Anh, chưa probe ca X) — không làm mờ — và
+  **vì sao**: thiếu năng lực gì (không chạy được app, không có quyền đọc production, không xem được
+  CI / branch protection). Người đọc cần biết cấp thêm gì để kiểm nốt.
 - Phát hiện lỗi ngoài phạm vi ⇒ báo + đề xuất làm riêng một commit, không tự gộp vào.
 - Kết thúc bằng **một** câu hỏi quyết định nếu có (ví dụ "push `abc123` không?").

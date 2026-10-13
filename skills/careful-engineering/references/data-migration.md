@@ -33,7 +33,7 @@ schema, migration, đồng bộ từ Excel/CSV.
 - Bẫy SQL đã gặp: `ADD COLUMN IF NOT EXISTS` bỏ mất `CHECK`; `ALTER COLUMN TYPE` lỗi khi có view
   dùng cột (chỉ trên đường migration); `DROP VIEW` mất GRANT (dùng `CREATE OR REPLACE`); view trên
   bảng RLS cần `security_invoker = true`; function plpgsql phải `SET search_path`; `UNIQUE` có cột
-  NULL không chặn gì (dùng partial index); kiểu số quá hẹp làm giá trị không tái tạo được.
+  NULL không chặn gì (dùng partial index, hoặc `UNIQUE NULLS NOT DISTINCT` từ PostgreSQL 15); kiểu số quá hẹp làm giá trị không tái tạo được.
 
 ## 3. Đối soát dữ liệu
 

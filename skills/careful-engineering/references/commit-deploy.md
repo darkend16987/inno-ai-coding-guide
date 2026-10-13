@@ -14,7 +14,7 @@
 ## 2. Thông điệp commit
 
 ### Quy ước ngôn ngữ — THEO REPO
-Đọc `CLAUDE.md` của repo trước. Hai quy ước đang dùng thực tế:
+Đọc `AGENTS.md` / `CLAUDE.md` của repo trước. Hai quy ước đang dùng thực tế:
 - **Tiếng Việt có dấu** (ví dụ một app desktop Electron) — được, NHƯNG chỉ qua `git commit -F <file>`.
 - **Tiếng Việt KHÔNG dấu** (ví dụ một dự án ETL + CSDL: *"Commit message không dùng dấu (tránh vỡ
   encoding khi qua PowerShell)"*). Tài liệu và comment vẫn có dấu; chỉ commit message không dấu.

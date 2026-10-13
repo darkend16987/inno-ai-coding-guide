@@ -39,17 +39,23 @@ không phải việc nào cũng cần đủ 8 pha. Nhưng **pha 4 (test) và pha
 - **Chuỗi có `\`, backtick, tiếng Việt ⇒ không sửa qua shell** (heredoc / sed / `python -c`).
   Dùng công cụ Edit/Write hoặc script patch ra file. → [references/windows-unicode.md](references/windows-unicode.md)
 - **Ra ngoài / khó lùi ⇒ có phép rõ ràng** (push, deploy, xoá, migration production).
+  Được giao "xem / kiểm tra / review" ⇒ chỉ đọc và báo cáo, chưa được sửa.
   → [references/asking-the-owner.md](references/asking-the-owner.md)
+- **Luật cần căn cứ.** Code đang viết thế, giá trị mặc định, pattern lặp lại cho biết hệ thống *đang*
+  làm gì — không cho biết nó *phải* làm gì. → [references/invariants.md](references/invariants.md)
 
 ## Quy trình 8 pha
 
 ### Pha 0 — Định hướng (đọc trước, không sửa gì)
-- Đọc `CLAUDE.md` / `AGENTS.md` / README của repo, memory index, sổ bất biến (grep theo mã, đừng
-  đọc cả file lớn), sổ việc đang mở, handoff gần nhất. Ghi lại các luật "không được phá" liên quan.
+- Đọc `AGENTS.md` / `CLAUDE.md` / README của repo, memory index, sổ bất biến (grep theo mã, đừng
+  đọc cả file lớn), sổ việc đang mở, kế hoạch đang làm (`docs/plans/active/`), handoff gần nhất.
+  Ghi lại các luật "không được phá" liên quan.
 - `git status`, `git log --oneline -10`: cây có sạch không, đang ở nhánh nào, việc dở của ai.
 - Xác định **phạm vi ảnh hưởng**: grep tên hàm/trường sẽ đổi trong **toàn repo** (không chỉ file
   đang mở) — mọi nơi đọc, mọi nơi ghi, mọi bản sao (UI, bake/export, serialize, test, docs).
-- → verify: liệt kê được các file/điểm chạm và các luật liên quan.
+- Xác định **năng lực**: chạy được test không, khởi động được app không (`docs/RUNBOOK.md`), đọc được
+  DB / log / CI không. Thiếu cái gì cần cho việc kiểm ⇒ ghi lại để báo, **không bịa lệnh** thay thế.
+- → verify: liệt kê được các file/điểm chạm, các luật liên quan, và những gì chưa kiểm được.
 
 ### Pha 1 — Hiểu đúng yêu cầu
 - Viết lại yêu cầu bằng lời mình + **tiêu chí thành công đo được**.
@@ -68,8 +74,9 @@ không phải việc nào cũng cần đủ 8 pha. Nhưng **pha 4 (test) và pha
   ```
 - Chạm dữ liệu nghiệp vụ / schema / migration ⇒ đọc [references/data-migration.md](references/data-migration.md)
   (không hành động theo giả thuyết chưa xác nhận; nghiệm thu trên nháp ở trạng thái production).
-- Thay đổi lớn / nhiều đợt ⇒ viết memo kế hoạch vào repo (`docs/…`) theo
-  [references/memo-handoff.md](references/memo-handoff.md), chia **đợt** độc lập, mỗi đợt một commit.
+- Thay đổi lớn / nhiều đợt / nhiều phiên ⇒ viết memo kế hoạch vào `docs/plans/active/` theo
+  [references/memo-handoff.md](references/memo-handoff.md) §1 (phạm vi làm / không làm, rủi ro + đường
+  lùi, đợt, kiểm chứng), chia **đợt** độc lập, mỗi đợt một commit.
 - Hành vi "không đổi" cho đầu vào cũ ⇒ thiết kế đường cũ đi **đúng nhánh cũ** (byte/pixel y hệt), có test.
 - → verify: mỗi bước có cách kiểm; đã chỉ ra cái gì tuyệt đối không được đổi.
 
@@ -85,12 +92,16 @@ không phải việc nào cũng cần đủ 8 pha. Nhưng **pha 4 (test) và pha
 2. **Toàn bộ** lưới test của mọi phần bị chạm (cả hai ngôn ngữ nếu repo có hai).
 3. **Probe hệ thống thật** cho mọi thay đổi giao diện / tích hợp / dữ liệu: đo sản phẩm cuối
    (file đã lưu, bản ghi DB, response) — kèm **baseline trên mã cũ** và **đối chứng dương**.
+   Khởi động / dữ liệu thử / log / dọn dẹp theo `docs/RUNBOOK.md`; chưa có thì ghi lại cái đã chạy được.
 4. Chạy lại các probe cũ của vùng lân cận (chống hồi quy chéo).
 - Đỏ ⇒ dừng, tìm nguyên nhân; **không** sửa test cho xanh nếu chưa hiểu vì sao đỏ.
 - → verify: báo đúng con số: `npm test 54/54`, `run_tests 25/25`, `probe 15/15 (HEAD cũ đỏ 9/15)`, `đột biến 5/5`.
 
 ### Pha 5 — Ghi sổ (memo, bất biến, handoff)
-- Sổ bất biến: mục mới (mã số, file/hàm, luật, số đo, "Vỡ khi:") + dòng ma trận "đụng gì → test gì".
+- Sổ bất biến: mục mới (mã số, căn cứ, luật, hàng rào + chứng minh hai chiều, mức bảo vệ, số đo,
+  "Vỡ khi:") + dòng ma trận "đụng gì → test gì". → [references/invariants.md](references/invariants.md)
+- Memo kế hoạch: cập nhật trạng thái đợt; xong việc ⇒ điền "Kết quả", chuyển quyết định / luật sống
+  lâu ra sổ chính, `git mv` sang `docs/plans/completed/`.
 - Cập nhật tài liệu người dùng / help / i18n nếu hành vi người dùng thấy thay đổi.
 - Memory (nếu có hệ thống memory): chỉ điều **không suy ra được từ repo** (quyết định của chủ dự án,
   bẫy môi trường đã đo, trạng thái push/phát hành). Cập nhật bản ghi cũ, không tạo bản trùng.
@@ -102,7 +113,7 @@ không phải việc nào cũng cần đủ 8 pha. Nhưng **pha 4 (test) và pha
 - Thông điệp theo [references/commit-deploy.md](references/commit-deploy.md): tiêu đề ngắn
   (type(scope): …) + thân nêu **nguyên nhân, cách sửa, số đo kiểm chứng**, viết ra **file** rồi
   `git commit -F file` (không nhúng chuỗi dài/tiếng Việt vào dòng lệnh).
-- **Có dấu hay không dấu: theo `CLAUDE.md` của repo** (có repo cấm dấu trong commit vì PowerShell).
+- **Có dấu hay không dấu: theo `AGENTS.md` / `CLAUDE.md` của repo** (có repo cấm dấu trong commit vì PowerShell).
   Commit xong đọc lại `git log -1 --format=%B`: không `â€` / `Ã` / `�` — sai thì amend **trước** khi push.
 - Push chỉ khi được yêu cầu / được phép đứng. Sau push: `git status` sạch, `git log -1` đúng.
 
@@ -124,7 +135,8 @@ phần **chưa** kiểm, việc ngoài phạm vi phát hiện được, rồi **
 |---|---|
 | [references/measurement.md](references/measurement.md) | trước khi nói "đã khớp / đã xong / không ảnh hưởng" |
 | [references/testing-net.md](references/testing-net.md) | viết test, đột biến, probe app thật, sổ bất biến |
-| [references/memo-handoff.md](references/memo-handoff.md) | mẫu memo kế hoạch, mục bất biến, handoff, decision log |
+| [references/invariants.md](references/invariants.md) | đặt luật mới, biến luật thành check tự động, báo mức bảo vệ (máy / hook / CI / chặn merge) |
+| [references/memo-handoff.md](references/memo-handoff.md) | nơi ở của từng loại thông tin; mẫu memo kế hoạch, mục bất biến, quyết định, handoff |
 | [references/commit-deploy.md](references/commit-deploy.md) | viết commit, push, phát hành |
 | [references/windows-unicode.md](references/windows-unicode.md) | mọi thao tác file/shell trên Windows, tiếng Việt, `\`, CRLF |
 | [references/asking-the-owner.md](references/asking-the-owner.md) | hỏi / không hỏi, trình bày quyết định, báo cáo |

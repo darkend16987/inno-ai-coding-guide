@@ -7,7 +7,7 @@
 
 | Bẫy (đã xảy ra) | Hậu quả |
 |---|---|
-| Heredoc Bash (kể cả `<<'EOF'` đã quote) gộp `\\` thành `\` | `"Ctrl+\\"` thành `Ctrl+)`: mất dấu `\` |
+| Heredoc trong **Bash tool của agent** (kể cả `<<'EOF'` đã quote) gộp `\\` thành `\` — bash thật không làm vậy, lớp chuyển lệnh của tool làm, nên đừng cãi bằng kiến thức bash | `"Ctrl+\\"` thành `Ctrl+)`: mất dấu `\` |
 | Chuỗi Python thường `'\b'` trong heredoc | file nhận ký tự **0x08** vô hình; regex `\b` đếm 0 khớp |
 | Backtick trong heredoc / `node -e '…'` | Bash báo `unexpected EOF`, **không chạy gì** |
 | `\n` trong anchor Python qua heredoc | thành xuống dòng thật ⇒ không khớp |
@@ -25,11 +25,14 @@ hiện `"\\"`, hai hiện `"\\\\"`. `grep -o` không phân biệt được. Ký 
 
 - **PowerShell 5.1** đọc `.ps1` không BOM theo ANSI: `—` thành `â€"`, đóng chuỗi sớm ⇒ script hỏng.
   ⇒ `.ps1` lưu **UTF-8 có BOM** (`EF BB BF`), và chuỗi in ra màn hình của script giữ **ASCII không
-  dấu** (`MIGRATE OK`, `TU CHOI CHAY`).
+  dấu** (`MIGRATE OK`, `TU CHOI CHAY`). Script phát qua `irm … | iex` thì BOM không giúp được (nội
+  dung đi qua HTTP rồi thành chuỗi) ⇒ giữ **toàn bộ file ASCII** (như `install.ps1` của guide này) và
+  kiểm: đếm byte > 127 phải bằng 0.
 - PowerShell: `Set-Content` / `Add-Content` mặc định ANSI ⇒ luôn `-Encoding utf8`; `>` / `Out-File`
   ra UTF-8 có BOM. Ưu tiên công cụ Write (UTF-8 không BOM).
-- Python in tiếng Việt ra stdout trên console cp1252 ⇒ `UnicodeEncodeError` (ghi FILE thì vẫn
-  được). Dùng `python -X utf8` hoặc `PYTHONIOENCODING=utf-8`. Lưu ý **`python -I` bỏ qua
+- Python in tiếng Việt ra stdout khi stdout là **pipe / chuyển hướng** (luôn đúng khi agent chạy lệnh)
+  ⇒ dùng mã hoá ANSI (cp1252) ⇒ `UnicodeEncodeError` (ghi FILE thì vẫn được; gõ tay trong cửa sổ
+  console có thể không lỗi — đừng lấy đó làm bằng chứng). Dùng `python -X utf8` hoặc `PYTHONIOENCODING=utf-8`. Lưu ý **`python -I` bỏ qua
   `PYTHONIOENCODING`** ⇒ với `-I` dùng `-X utf8`.
 - `sys.stdout.reconfigure(encoding="utf-8", errors="replace")` ở đầu script test Python.
 - CSV từ Google Sheets / Excel có **BOM** ⇒ đọc `encoding="utf-8-sig"` (không thì header đầu là
@@ -39,10 +42,10 @@ hiện `"\\"`, hai hiện `"\\\\"`. `grep -o` không phân biệt được. Ký 
 
 ## 3. Xuống dòng (CRLF / LF)
 
-- `git config core.autocrlf` thường `true` trên máy này ⇒ cảnh báo "LF will be replaced by CRLF"
-  là bình thường; script patch phải **giữ EOL của file gốc** (đọc `\r\n` hay `\n` rồi thay theo).
+- Git for Windows thường đặt `core.autocrlf=true` ⇒ cảnh báo "LF will be replaced by CRLF" là bình
+  thường; script patch phải **giữ EOL của file gốc** (đọc `\r\n` hay `\n` rồi thay theo).
 - Kiểm EOL: `git ls-files --eol <file>` hoặc `grep -cP '\r'`. **Không** dùng `grep -c $'\r'` trong
-  Bash tool ở máy này (cho "số CR = số dòng" ở mọi file — mẫu thành rỗng).
+  Bash tool của agent trên Windows (đã gặp: cho "số CR = số dòng" ở mọi file — mẫu thành rỗng).
 - Dữ liệu: Python `Path.write_text()` dùng `os.linesep` ⇒ ghi bằng `open(..., newline='')`.
   `.gitattributes` `*.sql text eol=lf` khi SQL có literal nhiều dòng (CR trong literal là DỮ LIỆU).
 - Kiểm CR trong cột text: **đếm CR, không đếm LF** (LF là dữ liệu nhiều dòng thật).
