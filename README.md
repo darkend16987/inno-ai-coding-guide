@@ -10,7 +10,7 @@ Bộ tài liệu cho thành viên team khi làm phần mềm / tool mới với 
 | [`guides/github-desktop-claude-code-codex.html`](guides/github-desktop-claude-code-codex.html) | Hướng dẫn A–Z: GitHub, GitHub Desktop, VS Code, Claude Code, Codex |
 | [`skills/careful-engineering/`](skills/careful-engineering/) | Skill cho Claude Code: quy trình làm việc chống hallucination & regression |
 | [`skills/caveman/`](skills/caveman/), [`ultracave/`](skills/ultracave/), [`megacave/`](skills/megacave/) | Skill giọng trả lời gọn (bật bằng `/caveman`), chép nguyên văn từ [juliusbrussee/caveman](https://github.com/juliusbrussee/caveman), Apache-2.0 |
-| [`starter/`](starter/) | Mẫu `CLAUDE.md`, `AGENTS.md`, `.gitignore` cho repo mới |
+| [`starter/`](starter/) | Mẫu `AGENTS.md`, `CLAUDE.md`, `docs/RUNBOOK.md`, `docs/plans/`, `.gitignore` cho repo mới |
 | [`install.ps1`](install.ps1) | Cài các skill bằng một lệnh PowerShell |
 
 ## Cài skill (Windows, PowerShell)
@@ -32,12 +32,26 @@ Kiểm tra: mở phiên Claude Code mới, gõ `/careful-engineering` hoặc `/c
 
 - `SKILL.md` — vai trò, 4 nguyên tắc Karpathy, luật vàng, quy trình 8 pha (đọc → hiểu → kế hoạch → làm →
   kiểm chứng → ghi sổ → commit → deploy), mỗi pha có phép kiểm.
-- `references/` — đo trước khi kết luận · lưới test & đột biến · mẫu memo/handoff/sổ bất biến · commit &
-  deploy · bẫy Windows/Unicode · hỏi & báo cáo · dữ liệu & migration.
-- `templates/` — `patch.js` (sửa chuỗi chính xác, tất-cả-hoặc-không) · `mutate.js` (chứng minh test bắt được lỗi).
+- `references/` — đo trước khi kết luận · lưới test & đột biến · bất biến → hàng rào tự động · mẫu
+  memo kế hoạch/handoff/sổ bất biến/quyết định · commit & deploy · bẫy Windows/Unicode · hỏi & báo cáo ·
+  dữ liệu & migration.
+- `templates/` — `patch.js` (sửa chuỗi chính xác, tất-cả-hoặc-không) · `mutate.js` (chứng minh test bắt được
+  lỗi; tự dừng nếu test trên mã nguyên trạng không xanh).
 
 Nền tảng: [andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) (4 nguyên tắc), cộng
-các bài học đã đo được từ dự án thật của team (đã ẩn danh hoá).
+các bài học đã đo được từ dự án thật của team (đã ẩn danh hoá). Phần bất biến (căn cứ, chứng minh hai chiều,
+mức bảo vệ), mẫu `RUNBOOK.md`, memo kế hoạch có vòng đời và cách dùng `AGENTS.md` làm nguồn duy nhất phỏng
+theo [hoangnb24/repository-harness](https://github.com/hoangnb24/repository-harness) (MIT, © 2025 Hoang Nguyen).
+
+## Starter cho repo mới
+
+| File | Là gì |
+|---|---|
+| [`starter/AGENTS.md`](starter/AGENTS.md) | Hướng dẫn chung cho mọi agent — nguồn duy nhất, Codex đọc trực tiếp |
+| [`starter/CLAUDE.md`](starter/CLAUDE.md) | Chỉ có `@AGENTS.md` để Claude Code nhập cùng nội dung (Claude Code không tự đọc `AGENTS.md` khi repo có `CLAUDE.md`) |
+| [`starter/docs/RUNBOOK.md`](starter/docs/RUNBOOK.md) | Cách chạy, biết app đã sẵn sàng, dữ liệu thử, lấy log, dọn dẹp — để AI tự kiểm trên app thật |
+| [`starter/docs/plans/`](starter/docs/plans/) | Kế hoạch việc lớn: `active/` → `completed/` |
+| [`starter/.gitignore`](starter/.gitignore) | `.gitignore` cơ bản |
 
 ## Skill caveman
 
