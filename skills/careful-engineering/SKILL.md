@@ -19,7 +19,7 @@ những pha mức đó yêu cầu.
 |---|---|---|
 | **S · Nhỏ** | Sửa chữ, cấu hình cục bộ, một chỗ hiển nhiên; không đổi hành vi người dùng khác thấy, không chạm dữ liệu | Pha 0 rút gọn (đọc file đích + grep chỗ dùng) · làm · kiểm cú pháp + test liên quan nếu có · pha 6 |
 | **M · Chuẩn** | Tính năng / sửa lỗi trong một vùng, lùi được bằng revert | Pha 0–4 và 6 · pha 5 chỉ cần handoff ngắn · đột biến cho test của lỗi đã sửa |
-| **L · Nghiêm** | Dữ liệu nghiệp vụ, schema / migration, production, nhiều module, bản phát hành cho người khác dùng, **con số người khác dùng để ra quyết định** (tiền, khối lượng, diện tích, hợp đồng) | Đủ 8 pha · memo kế hoạch + chờ duyệt trước khi sửa · đột biến · probe thật có baseline · sổ bất biến |
+| **L · Nghiêm** | Dữ liệu nghiệp vụ, schema / migration, production, nhiều module, bản phát hành cho người khác dùng, **con số người khác dùng để ra quyết định** (tiền, khối lượng, diện tích, hợp đồng) | Đủ 8 pha · thiết kế ngắn (nếu mới) + memo kế hoạch, chờ duyệt trước khi sửa · đột biến · probe thật có baseline · review độc lập · sổ bất biến |
 
 - Mức do **bán kính ảnh hưởng × độ khó lùi** quyết định, không do số dòng code. Phân vân ⇒ chọn mức cao hơn.
 - Giữa chừng phát hiện rủi ro lớn hơn (đụng dữ liệu, đụng chỗ có `BI-*`) ⇒ **nâng mức**, nói ra, làm bù pha còn thiếu.
@@ -46,12 +46,14 @@ những pha mức đó yêu cầu.
 - **Không bịa.** Tên hàm, file, cờ, API, số liệu: chỉ nói khi đã đọc/đo trong phiên này. Memory
   và tài liệu là *gợi ý nơi tìm*, không phải sự thật hiện tại — kiểm lại trước khi dựa vào.
 - **"Xong" = có số đo do trạng thái thật sinh ra.** Không phải "không có lỗi", không phải log in
-  ra "OK". → [references/measurement.md](references/measurement.md)
+  ra "OK", không phải "subagent báo xong". Sắp viết "chắc là / có lẽ / should work" ⇒ đi đo.
+  → [references/measurement.md](references/measurement.md)
 - **Một việc một commit.** Không gộp "đổi hành vi" với "di chuyển / refactor". Lưới test xanh
   trước **và** sau.
 - **Test mới phải đỏ được** (đột biến rồi khôi phục bằng bản trong bộ nhớ, không `git checkout`).
   → [references/testing-net.md](references/testing-net.md)
-- **Tái hiện lỗi trước khi sửa.** Chưa tái hiện được có chủ đích = chưa hiểu = chưa sửa.
+- **Tái hiện lỗi trước khi sửa.** Chưa tái hiện được có chủ đích = chưa hiểu = chưa sửa. Sửa hỏng
+  3 lần ⇒ dừng, nghi thiết kế, báo chủ dự án. → [references/debugging.md](references/debugging.md)
 - **Chuỗi có `\`, backtick, tiếng Việt ⇒ không sửa qua shell** (heredoc / sed / `python -c`).
   Dùng công cụ Edit/Write hoặc script patch ra file. → [references/windows-unicode.md](references/windows-unicode.md)
 - **Ra ngoài / khó lùi ⇒ có phép rõ ràng** (push, deploy, xoá, migration production).
@@ -77,12 +79,21 @@ những pha mức đó yêu cầu.
   DB / log / CI không. Thiếu cái gì cần cho việc kiểm ⇒ ghi lại để báo, **không bịa lệnh** thay thế.
 - → verify: liệt kê được các file/điểm chạm, các luật liên quan, và những gì chưa kiểm được.
 
-### Pha 1 — Hiểu đúng yêu cầu
-- Viết lại yêu cầu bằng lời mình + **tiêu chí thành công đo được**.
-- Có mơ hồ thật (≥ 2 cách hiểu, kết quả khác nhau, code không trả lời được) ⇒ **hỏi**, kèm
-  phương án khuyến nghị. Không mơ hồ ⇒ đừng hỏi, nêu giả định một dòng rồi làm.
-- Với lỗi: **tái hiện** trên hệ thống thật, ghi số đo "trước khi sửa".
-- → verify: có tiêu chí đo được; có số đo tái hiện (với lỗi).
+### Pha 1 — Hiểu đúng yêu cầu (làm rõ ý định)
+- **Đọc trước khi hỏi:** tài liệu, code, dữ liệu, handoff mà người dùng nhắc tới — đọc tới khi giải thích
+  được phần liên quan đang chạy thế nào. Không hỏi điều repo đã trả lời.
+- Viết lại yêu cầu bằng lời mình: **muốn gì, cho ai, vì sao**, + **tiêu chí thành công đo được**, + **không
+  làm**, + **thất bại dù đúng kỹ thuật** (ví dụ "tính đúng nhưng lệch file Excel kế toán đang dùng"). Thấy
+  ràng buộc / mâu thuẫn / đường rẻ hơn mà người dùng có thể chưa nghĩ tới ⇒ nói ra.
+- Mơ hồ thật (≥ 2 cách hiểu, kết quả khác nhau, code không trả lời được) ⇒ hỏi **một câu mỗi lượt** — câu
+  mà câu trả lời đổi nhiều nhất cái sẽ làm — nói vì sao hỏi, kèm phương án khuyến nghị. Người dùng không
+  xin bàn ⇒ thêm một dòng "hoặc tôi cứ làm theo cách hiểu trên". Không mơ hồ ⇒ nêu giả định một dòng rồi làm.
+- Mức M/L có nhiều cách làm khác nhau thật ⇒ trình bày **2–3 hướng** (đánh đổi + khuyến nghị) để người
+  dùng **chọn** trước khi lập kế hoạch. Lựa chọn mình tự quyết thì ghi là của mình, không ghi "đã thống nhất".
+- Dự án mới / tính năng mức L ⇒ **bản thiết kế ngắn** được duyệt trước kế hoạch
+  ([references/memo-handoff.md](references/memo-handoff.md) §0).
+- Với lỗi: **tái hiện** trên hệ thống thật, ghi số đo "trước khi sửa" ([references/debugging.md](references/debugging.md) bước 1).
+- → verify: có tiêu chí đo được + "không làm"; hướng đã chọn (M/L); số đo tái hiện (với lỗi).
 
 ### Pha 2 — Thiết kế & kế hoạch
 - Tìm nguyên nhân gốc, không vá triệu chứng. Chọn phương án **ít bề mặt thay đổi nhất** đạt tiêu chí.
@@ -114,7 +125,10 @@ những pha mức đó yêu cầu.
    (file đã lưu, bản ghi DB, response) — kèm **baseline trên mã cũ** và **đối chứng dương**.
    Khởi động / dữ liệu thử / log / dọn dẹp theo `docs/RUNBOOK.md`; chưa có thì ghi lại cái đã chạy được.
 4. Chạy lại các probe cũ của vùng lân cận (chống hồi quy chéo).
-- Đỏ ⇒ dừng, tìm nguyên nhân; **không** sửa test cho xanh nếu chưa hiểu vì sao đỏ.
+5. Mức L / trước merge: **review độc lập** bằng một agent mới — đúng yêu cầu chưa, rồi chất lượng.
+   Báo cáo của subagent là lời khai: tự xem diff, tự chạy lại. → [references/review-delegation.md](references/review-delegation.md)
+- Đỏ ⇒ dừng, tìm nguyên nhân ([references/debugging.md](references/debugging.md)); **không** sửa test cho
+  xanh nếu chưa hiểu vì sao đỏ.
 - → verify: báo đúng con số: `npm test 54/54`, `run_tests 25/25`, `probe 15/15 (HEAD cũ đỏ 9/15)`, `đột biến 5/5`.
 
 ### Pha 5 — Ghi sổ (memo, bất biến, handoff)
@@ -147,8 +161,9 @@ những pha mức đó yêu cầu.
 ### Trường hợp đặc biệt
 - **Dự án mới (chưa có code).** Pha 0 thành: mục tiêu, ai dùng, ràng buộc môi trường (phiên bản host
   như Revit / AutoCAD / Node / Python, máy chạy, nơi deploy), dữ liệu thật trông thế nào — hỏi nếu
-  thiếu. Chọn công nghệ theo ràng buộc, nêu đánh đổi. Việc đầu tiên là **khung chạy được từ đầu tới
-  cuối** + một test + `AGENTS.md` + `docs/RUNBOOK.md`, rồi mới tới tính năng.
+  thiếu. Chọn công nghệ theo ràng buộc, nêu đánh đổi, ghi vào bản thiết kế ngắn (memo-handoff §0) chờ
+  duyệt. Việc đầu tiên là **khung chạy được từ đầu tới cuối** + một test + `AGENTS.md` +
+  `docs/RUNBOOK.md`, rồi mới tới tính năng.
 - **Prototype / thử ý tưởng** — chỉ khi người dùng nói rõ là thử. Được bỏ ghi sổ và đột biến; vẫn
   không bịa, không commit secret. Ghi `PROTOTYPE — chưa kiểm chứng để dùng thật` đầu README. Đem
   prototype đi dùng thật ⇒ coi là việc mức M/L mới: dựng lưới test cho phần giữ lại.
@@ -171,6 +186,8 @@ phần **chưa** kiểm, việc ngoài phạm vi phát hiện được, rồi **
 |---|---|
 | [references/project-types.md](references/project-types.md) | pha 0 và pha 4: kiểm chứng gì, bẫy gì, phát hành ra sao theo loại dự án |
 | [references/measurement.md](references/measurement.md) | trước khi nói "đã khớp / đã xong / không ảnh hưởng" |
+| [references/debugging.md](references/debugging.md) | lỗi, test đỏ, build hỏng, hành vi lạ — trước khi đề xuất cách sửa |
+| [references/review-delegation.md](references/review-delegation.md) | giao việc cho subagent, review độc lập, nhận góp ý review |
 | [references/testing-net.md](references/testing-net.md) | viết test, đột biến, probe app thật, sổ bất biến |
 | [references/invariants.md](references/invariants.md) | đặt luật mới, biến luật thành check tự động, báo mức bảo vệ (máy / hook / CI / chặn merge) |
 | [references/memo-handoff.md](references/memo-handoff.md) | nơi ở của từng loại thông tin; mẫu memo kế hoạch, mục bất biến, quyết định, handoff |

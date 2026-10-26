@@ -12,7 +12,7 @@ repo trước khi tạo file mới. Repo đã đặt tên khác (ví dụ `docs/
 | Câu trả lời của chủ dự án + diễn giải | `docs/OWNER-ANSWERS.md` |
 | Bất biến / luật chống hồi quy + ma trận test | `docs/REGRESSION-GUARD.md` |
 | Cách chạy app, biết app đã sẵn sàng, lấy log, dọn dẹp | `docs/RUNBOOK.md` |
-| Kế hoạch của một việc lớn | `docs/plans/active/` → xong thì chuyển sang `docs/plans/completed/` |
+| Thiết kế + kế hoạch của một việc lớn | `docs/plans/active/` → xong thì chuyển sang `docs/plans/completed/` |
 | Bẫy mới gặp (môi trường, công cụ) | `AGENTS.md` mục "Điều dễ vướng" + memory |
 
 Code, test và lịch sử git là nguồn sự thật về **cái đang chạy**. Sổ ghi chỉ giữ cái code không nói
@@ -21,6 +21,27 @@ bản chép sẽ lệch.
 
 Mọi dòng mang **mã truy được**: `BI-*` bất biến, `RR-*` rủi ro, `QĐ-*` quyết định, `W*` luật dữ liệu,
 `C*`/`PB-*` câu hỏi, `P1…P8` / `Đợt A` hạng mục kế hoạch. Mục đã đóng: **gạch ngang + 🟢 ngày**, không xoá.
+
+## 0. Bản thiết kế ngắn (dự án mới / tính năng mức L, trước memo kế hoạch)
+
+Trả lời "làm **cái gì**", chưa phải "làm **thế nào** từng bước". Đủ để một người chưa dự cuộc trao đổi
+lập được kế hoạch. Một trang là đủ; việc nhỏ thì vài dòng trong chat. File:
+`docs/plans/active/YYYY-MM-DD-<ten-viec>-thiet-ke.md` (repo đã có chỗ riêng ⇒ theo repo).
+
+```markdown
+# <Tên> — thiết kế
+Ngày · Trạng thái: CHỜ DUYỆT | ĐÃ DUYỆT <ngày, ai>
+## Mục tiêu — cho ai, để làm gì, vì sao bây giờ
+## Thành công trông thế nào (đo được)
+## Không làm (lần này) · Thất bại dù đúng kỹ thuật
+## Ràng buộc — phiên bản host / runtime, máy chạy, dữ liệu thật, pháp lý, ngân sách
+## Hướng đã chọn + các hướng đã loại (một dòng mỗi hướng, vì sao)
+## Lựa chọn tôi tự quyết (đảo được) · Câu hỏi còn mở
+```
+Đã duyệt ⇒ lập memo kế hoạch §1, trỏ về file này (kế hoạch lập luận từ thiết kế; người làm đọc cả hai).
+
+*§0, cột "dùng / cung cấp" và §6b phỏng theo skill brainstorming và writing-plans của
+[obra/superpowers](https://github.com/obra/superpowers) (MIT).*
 
 ## 1. Memo kế hoạch (trước khi làm việc lớn)
 
@@ -43,9 +64,14 @@ Ngày tạo: YYYY-MM-DD
 ## 5. Rủi ro & đường lùi
 | Rủi ro | Cách phòng | Nếu xảy ra thì lùi thế nào (revert commit / migration ngược / bật lại đường cũ) |
 ## 6. Kế hoạch theo đợt
-| Đợt | Việc | File chạm | Verify | ☐/☑ + commit |
+| Đợt | Việc | File chạm (đường dẫn chính xác) | Dùng / cung cấp cho đợt khác (tên hàm, kiểu) | Verify | ☐/☑ + commit |
+<Mỗi đợt kết thúc bằng một thứ kiểm độc lập được; chia ở chỗ người review có thể duyệt đợt này mà bác đợt kia.>
+## 6b. Trọng tâm review
+<3–5 đầu vào / tình huống mà yêu cầu ngầm đòi nhưng chưa test nào chạm tới, dễ làm người dùng vấp nhất —
+mỗi dòng: tình huống + hành vi người dùng hợp lý sẽ mong đợi. Rồi gắn test cho từng dòng vào đợt sở hữu
+đoạn code đó. Yêu cầu im lặng về một đầu vào không có nghĩa được phép hỏng với nó.>
 ## 7. Quyết định trong lúc làm
-- YYYY-MM-DD: <quyết định nhỏ> — vì <lý do>.
+- YYYY-MM-DD: <quyết định nhỏ> — vì <lý do> — nếu sai thì tốn <gì để lùi>.
 ## 8. Kiểm chứng
 - Tập trung: <test mới, đột biến N/M>
 - App thật / tích hợp: <probe theo docs/RUNBOOK.md, số đo, baseline mã cũ>

@@ -26,6 +26,18 @@ Luật chung cho mọi loại:
   - Tự viết đăng nhập (JWT riêng) ⇒ mọi route API phải tự kiểm quyền; test cả khi thiếu / sai / hết hạn token.
   - Firestore: không ghi `undefined`; thời gian dùng `serverTimestamp()`; truy vấn mới có thể cần index.
   - Tiền: số nguyên (VND không có phần lẻ), không `float`.
+- **Giao diện — nhìn chính cái mình làm ra:** chụp màn hình trang thật ở **3 độ rộng** (khoảng 1440 /
+  768 / 390 px), tự chấm theo một bảng tiêu chí ngắn (nội dung chính đọc được không cần cuộn ngang, chữ
+  không tràn, nút bấm đủ lớn trên điện thoại, trạng thái rỗng / đang tải / lỗi có hiển thị), sửa, chụp
+  lại. "Code trông đúng" không thay được ảnh chụp.
+  - **Không bịa số liệu / khách hàng / lời khen** trên trang (số người dùng, logo đối tác, "4.9 sao").
+    Dashboard: số liệu thật hoặc dữ liệu mẫu **cộng khớp** và ghi rõ là mẫu.
+  - Tránh "mặt tiền mặc định của AI": tiêu đề căn giữa + nhãn nhỏ phía trên + hàng ba thẻ biểu tượng +
+    nền gradient nhạt — trông được nhưng không ai quyết định gì. Ý tưởng lấy từ chính chủ đề / người dùng.
+  - Trang công khai cần đầu tư thiết kế (landing page, trang sự kiện, portfolio): có thể cài thêm skill
+    ngoài **taste-skill** ([leonxlnx/taste-skill](https://github.com/leonxlnx/taste-skill), MIT; cần Node 22+
+    và Chrome / Edge; tự tìm ảnh trên mạng — kiểm nguồn và ghi công ảnh). Mỗi repo chỉ dùng **một** skill
+    thiết kế để không giành nhau.
 - **Phát hành:** Vercel / Firebase Hosting thường **deploy khi push** ⇒ push = phát hành, nói trước. Biến
   môi trường production đặt trên nền tảng, kiểm tên biến (không in giá trị). Sau deploy mở URL thật.
 

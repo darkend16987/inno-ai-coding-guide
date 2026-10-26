@@ -82,7 +82,18 @@ difflib, auto-match, linter "fix", AI khác… Nhất là khi có hai phần t�
 - Lỗi chưa tái hiện được có chủ đích ⇒ chưa hiểu lỗi ⇒ chưa được sửa.
 - So bằng **dung sai** đã nêu (`≤ 0,6 pt`), không so bằng tuyệt đối; nêu số đo thật.
 
-## 9. Ghi lại cái gì đã đo, cái gì lấy từ nguồn khác
+## 9. Câu chữ báo hiệu "chưa kiểm"
+
+Sắp viết một trong những câu dưới đây ⇒ dừng, chạy phép đo, rồi viết lại bằng con số:
+- "chắc là", "có lẽ", "hẳn là", "should work", "probably", "seems to", "trông ổn".
+- "Xong rồi!", "Hoàn hảo!" khi lệnh kiểm chưa chạy **trong lượt này**.
+- "Test xanh" dựa vào lần chạy trước, hoặc vào việc linter xanh (linter ≠ trình biên dịch ≠ test).
+- "Subagent báo xong" — xem diff và chạy lại ([review-delegation.md](review-delegation.md) §3).
+- "Yêu cầu đã đạt" khi chưa đọc lại yêu cầu từng dòng và đánh dấu từng mục.
+
+*Phỏng theo verification-before-completion của [obra/superpowers](https://github.com/obra/superpowers) (MIT).*
+
+## 10. Ghi lại cái gì đã đo, cái gì lấy từ nguồn khác
 
 Trong memo / commit: tiền đề nào **đã đo** (kèm số), tiền đề nào **lấy từ tài liệu / người khác**
 (chưa kiểm). Người đọc sau cần biết cái nào đáng đo lại.
