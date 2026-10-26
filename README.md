@@ -13,6 +13,7 @@ Bộ tài liệu cho thành viên team khi làm phần mềm / tool mới với 
 | [`skills/caveman/`](skills/caveman/), [`ultracave/`](skills/ultracave/), [`megacave/`](skills/megacave/) | Skill giọng trả lời gọn (bật bằng `/caveman`), chép nguyên văn từ [juliusbrussee/caveman](https://github.com/juliusbrussee/caveman), Apache-2.0 |
 | [`starter/`](starter/) | Mẫu `AGENTS.md`, `CLAUDE.md`, `docs/RUNBOOK.md`, `docs/plans/`, `.gitignore` cho repo mới |
 | [`install.ps1`](install.ps1) | Cài các skill bằng một lệnh PowerShell |
+| [`evals/`](evals/) | Tình huống thử để đo skill có làm agent tốt lên không |
 
 ## Cài skill (Windows, PowerShell)
 
@@ -33,11 +34,11 @@ Kiểm tra: mở phiên Claude Code mới, gõ `/careful-engineering` hoặc `/c
 
 ## Skill careful-engineering gồm gì
 
-- `SKILL.md` — vai trò, 4 nguyên tắc Karpathy, luật vàng, quy trình 8 pha (đọc → hiểu → kế hoạch → làm →
-  kiểm chứng → ghi sổ → commit → deploy), mỗi pha có phép kiểm.
-- `references/` — đo trước khi kết luận · lưới test & đột biến · bất biến → hàng rào tự động · mẫu
-  memo kế hoạch/handoff/sổ bất biến/quyết định · commit & deploy · bẫy Windows/Unicode · hỏi & báo cáo ·
-  dữ liệu & migration.
+- `SKILL.md` — vai trò, 4 nguyên tắc Karpathy, chọn mức S/M/L, luật vàng, quy trình 8 pha (đọc → hiểu →
+  kế hoạch → làm → kiểm chứng → ghi sổ → commit → deploy), mỗi pha có phép kiểm.
+- `references/` — theo loại dự án · đo trước khi kết luận · gỡ lỗi có hệ thống · subagent & review độc
+  lập · lưới test & đột biến · bất biến → hàng rào tự động · mẫu thiết kế ngắn / memo kế hoạch / handoff /
+  sổ bất biến / quyết định · commit & deploy · bẫy Windows/Unicode · hỏi & báo cáo · dữ liệu & migration.
 - `templates/` — `patch.js` (sửa chuỗi chính xác, tất-cả-hoặc-không) · `mutate.js` (chứng minh test bắt được
   lỗi; tự dừng nếu test trên mã nguyên trạng không xanh).
 
@@ -45,6 +46,23 @@ Nền tảng: [andrej-karpathy-skills](https://github.com/multica-ai/andrej-karp
 các bài học đã đo được từ dự án thật của team (đã ẩn danh hoá). Phần bất biến (căn cứ, chứng minh hai chiều,
 mức bảo vệ), mẫu `RUNBOOK.md`, memo kế hoạch có vòng đời và cách dùng `AGENTS.md` làm nguồn duy nhất phỏng
 theo [hoangnb24/repository-harness](https://github.com/hoangnb24/repository-harness) (MIT, © 2025 Hoang Nguyen).
+
+Phần viết lại (không chép nguyên văn) từ các dự án khác, có ghi nguồn ngay trong từng file:
+
+| Nguồn | License | Đã lấy gì | Ở đâu |
+|---|---|---|---|
+| [obra/superpowers](https://github.com/obra/superpowers) (Jesse Vincent) | MIT | Gỡ lỗi có hệ thống; làm rõ ý định trước khi xây; thiết kế ngắn, giao diện giữa các đợt và "trọng tâm review" trong kế hoạch; giao việc cho subagent, review hai bước, nhận review; câu chữ báo hiệu chưa kiểm; thử skill bằng tình huống có / không có skill | `references/debugging.md`, `review-delegation.md`, pha 1 của `SKILL.md`, `memo-handoff.md` §0 §6b, `measurement.md` §9, `evals/` |
+| [leonxlnx/taste-skill](https://github.com/leonxlnx/taste-skill) | MIT | Tự chụp và chấm giao diện ở 3 độ rộng, không bịa số liệu; eval có skill / không skill, người chấm không biết bên nào | `references/project-types.md` §1, `evals/` |
+| [google-research/harness2](https://github.com/google-research/harness2) | Apache-2.0 | Bảng 8 thành phần của harness; vòng đề xuất → chạy thử → chỉ giữ bài học có bằng chứng | trang (mục 3 lớp), `evals/README.md` |
+
+Không cài các dự án trên song song với `careful-engineering`; taste-skill là skill ngoài tuỳ chọn cho trang
+web công khai — xem mục "Skill ngoài" trên trang.
+
+## Đo chất lượng skill
+
+[`evals/`](evals/) chứa tình huống thử cho `careful-engineering` và `inno-aec`, cách chạy (có skill / không
+skill, chấm theo danh sách "phải có / không được") và [`RESULTS.md`](evals/RESULTS.md). Sửa luật của skill ⇒
+kèm số đo trước / sau. Thư mục này không được lệnh cài chép về máy.
 
 ## Starter cho repo mới
 
@@ -79,4 +97,4 @@ trong `NOTICE` của từng thư mục.
 ## Đóng góp
 
 Pull Request vào `skills/careful-engineering/references/`. Mỗi bài học: chuyện đã xảy ra (có số đo) → luật →
-cách áp dụng. **Không** đưa số liệu, tên khách hàng, mật khẩu hay dữ liệu nội bộ vào repo này — repo public.
+cách áp dụng. Đổi luật của skill ⇒ thêm / chạy tình huống trong `evals/` theo [`evals/README.md`](evals/README.md). **Không** đưa số liệu, tên khách hàng, mật khẩu hay dữ liệu nội bộ vào repo này — repo public.
