@@ -1,5 +1,25 @@
 # Lưới test chống hồi quy
 
+## 0. Repo chưa có lưới test
+
+Phần lớn tool nội bộ, script, plugin bắt đầu không có test. Đừng dựng framework lớn khi không được
+giao; dựng **lưới tối thiểu cho đúng vùng sắp chạm**, trước khi sửa:
+
+1. **Test đặc tả (characterization / golden file).** Chọn vài đầu vào thật, nhỏ, đại diện (gồm ca
+   biên) → chạy mã **hiện tại** → lưu đầu ra vào `tests/golden/`. Kiểm tra = chạy lại và so. Mục đích
+   là ghi lại hành vi đang có, không phải khẳng định nó đúng: chỗ nào nghi sai thì ghi vào sổ việc mở,
+   đừng "sửa luôn" trong golden.
+2. Đầu ra có phần thay đổi mỗi lần (ngày giờ, GUID, thứ tự `set`) ⇒ chuẩn hoá trước khi so, đừng nới
+   phép so tới mức không bắt được gì.
+3. Một lệnh chạy tất cả (`npm test`, `pytest`, `dotnet test`, `scripts/check.ps1`), ghi vào
+   `AGENTS.md` mục "Chạy & test". Lưới ở lệnh riêng không ai nhớ sẽ không ai chạy.
+4. Chứng minh lưới đỏ được: sửa hỏng một chỗ có chủ đích ⇒ phải đỏ (§2).
+5. Phần cần host / thiết bị / tài khoản mà máy không có: tách logic thuần ra thư viện test được
+   (§3); phần còn lại là **kịch bản thử tay** trong `docs/RUNBOOK.md` §9, và báo rõ chưa chạy.
+
+Tool tính toán (diện tích, khối lượng, tiền) luôn cần golden file với **số đã được người trong nghề
+kiểm tay** — đó là căn cứ duy nhất để nói "kết quả đúng", không phải "chạy không lỗi".
+
 ## 1. Chạy lưới TRƯỚC và SAU mỗi thay đổi
 
 - Trước: biết lưới đang xanh (hoặc đỏ sẵn ở đâu) — nếu không, đỏ sau khi sửa không quy được cho ai.

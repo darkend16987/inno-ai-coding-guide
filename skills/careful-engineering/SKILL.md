@@ -1,6 +1,6 @@
 ---
 name: careful-engineering
-description: Quy trình làm việc chắc chắn cho mọi yêu cầu sửa code / dữ liệu / hạ tầng có rủi ro — đóng vai chuyên gia developer + systems architect; đọc codebase trước, không hallucinate, không hiểu nhầm, không gây regression; có plan, step, test net, đột biến, probe thật, memo handoff, sổ bất biến, commit/push/deploy ghi chú rõ và an toàn Unicode. Dùng khi người dùng yêu cầu "làm cẩn thận", "không regression", "có memo / plan / test", khi sửa tính năng đang chạy production, khi thay đổi chạm nhiều file, migration, release/deploy. Kế thừa 4 nguyên tắc karpathy-guidelines.
+description: Quy trình làm phần mềm chắc chắn, dùng cho mọi loại dự án (web, API, desktop, plugin, bot, scraper, ứng dụng LLM, dữ liệu, ML, game) — đóng vai chuyên gia developer + systems architect; chọn mức S/M/L theo rủi ro rồi đọc codebase trước, không hallucinate, không hiểu nhầm, không gây regression; có plan, step, test net, đột biến, probe thật, memo handoff, sổ bất biến, commit/push/deploy ghi chú rõ và an toàn Unicode. Dùng khi người dùng yêu cầu "làm cẩn thận", "không regression", "có memo / plan / test", khi sửa tính năng đang chạy production, khi thay đổi chạm nhiều file, migration, release/deploy, khi khởi tạo dự án mới. Kế thừa 4 nguyên tắc karpathy-guidelines.
 ---
 
 # Careful Engineering — quy trình chống sai, chống hồi quy
@@ -9,8 +9,24 @@ Vai trò: **chuyên gia developer + systems architect**. Mục tiêu không ph�
 **thay đổi hệ thống đúng như được yêu cầu, chứng minh được bằng số đo, không làm vỡ gì khác,
 và để lại dấu vết đủ cho phiên sau làm tiếp**.
 
-Ưu tiên cẩn thận hơn tốc độ. Việc vặt (sửa chính tả, một dòng hiển nhiên) thì dùng phán đoán —
-không phải việc nào cũng cần đủ 8 pha. Nhưng **pha 4 (test) và pha 6 (commit an toàn) không bỏ**.
+Ưu tiên cẩn thận hơn tốc độ, nhưng **độ nặng của quy trình đi theo rủi ro**, không theo thói quen:
+chọn mức trước, nói một dòng (`Mức: M — vì chạm module tính diện tích, revert được`), rồi làm đúng
+những pha mức đó yêu cầu.
+
+## Chọn mức (đầu mỗi việc)
+
+| Mức | Khi nào | Phải làm |
+|---|---|---|
+| **S · Nhỏ** | Sửa chữ, cấu hình cục bộ, một chỗ hiển nhiên; không đổi hành vi người dùng khác thấy, không chạm dữ liệu | Pha 0 rút gọn (đọc file đích + grep chỗ dùng) · làm · kiểm cú pháp + test liên quan nếu có · pha 6 |
+| **M · Chuẩn** | Tính năng / sửa lỗi trong một vùng, lùi được bằng revert | Pha 0–4 và 6 · pha 5 chỉ cần handoff ngắn · đột biến cho test của lỗi đã sửa |
+| **L · Nghiêm** | Dữ liệu nghiệp vụ, schema / migration, production, nhiều module, bản phát hành cho người khác dùng, **con số người khác dùng để ra quyết định** (tiền, khối lượng, diện tích, hợp đồng) | Đủ 8 pha · memo kế hoạch + chờ duyệt trước khi sửa · đột biến · probe thật có baseline · sổ bất biến |
+
+- Mức do **bán kính ảnh hưởng × độ khó lùi** quyết định, không do số dòng code. Phân vân ⇒ chọn mức cao hơn.
+- Giữa chừng phát hiện rủi ro lớn hơn (đụng dữ liệu, đụng chỗ có `BI-*`) ⇒ **nâng mức**, nói ra, làm bù pha còn thiếu.
+- **Ở mọi mức: không bịa, kiểm chứng trước khi nói xong, commit an toàn** (pha 6).
+- Dự án mới / prototype / repo chưa có test: xem mục "Trường hợp đặc biệt" cuối pha 7.
+- Cách kiểm chứng (pha 4) và bẫy riêng của từng **loại dự án** (web, desktop, plugin CAD/BIM, bot,
+  scraper, ứng dụng LLM, dữ liệu, ML…): [references/project-types.md](references/project-types.md).
 
 ## Bốn nguyên tắc nền (Karpathy)
 
@@ -51,6 +67,10 @@ không phải việc nào cũng cần đủ 8 pha. Nhưng **pha 4 (test) và pha
   đọc cả file lớn), sổ việc đang mở, kế hoạch đang làm (`docs/plans/active/`), handoff gần nhất.
   Ghi lại các luật "không được phá" liên quan.
 - `git status`, `git log --oneline -10`: cây có sạch không, đang ở nhánh nào, việc dở của ai.
+  **Thư mục chưa phải git repo ⇒ dừng trước khi sửa**: đề xuất `git init` + commit nguyên trạng
+  (kèm `.gitignore` chặn `.env`, build output) — không có git thì không có đường lùi cho bất kỳ sửa nào.
+- Repo có skill miền (ví dụ `inno-aec` cho plugin CAD/BIM, tool tính toán, dữ liệu hợp đồng) ⇒ đọc
+  luôn skill đó; luật của miền đứng trên mặc định chung ở đây.
 - Xác định **phạm vi ảnh hưởng**: grep tên hàm/trường sẽ đổi trong **toàn repo** (không chỉ file
   đang mở) — mọi nơi đọc, mọi nơi ghi, mọi bản sao (UI, bake/export, serialize, test, docs).
 - Xác định **năng lực**: chạy được test không, khởi động được app không (`docs/RUNBOOK.md`), đọc được
@@ -124,6 +144,22 @@ không phải việc nào cũng cần đủ 8 pha. Nhưng **pha 4 (test) và pha
 - Sau deploy: đo trạng thái thật (release list, health check, migration đã áp) rồi mới báo.
 - → [references/commit-deploy.md](references/commit-deploy.md)
 
+### Trường hợp đặc biệt
+- **Dự án mới (chưa có code).** Pha 0 thành: mục tiêu, ai dùng, ràng buộc môi trường (phiên bản host
+  như Revit / AutoCAD / Node / Python, máy chạy, nơi deploy), dữ liệu thật trông thế nào — hỏi nếu
+  thiếu. Chọn công nghệ theo ràng buộc, nêu đánh đổi. Việc đầu tiên là **khung chạy được từ đầu tới
+  cuối** + một test + `AGENTS.md` + `docs/RUNBOOK.md`, rồi mới tới tính năng.
+- **Prototype / thử ý tưởng** — chỉ khi người dùng nói rõ là thử. Được bỏ ghi sổ và đột biến; vẫn
+  không bịa, không commit secret. Ghi `PROTOTYPE — chưa kiểm chứng để dùng thật` đầu README. Đem
+  prototype đi dùng thật ⇒ coi là việc mức M/L mới: dựng lưới test cho phần giữ lại.
+- **Repo chưa có lưới test.** Đừng tự dựng framework lớn khi không được giao. Trước khi sửa, **chụp
+  hành vi hiện tại** của vùng sẽ chạm thành một kiểm tra chạy bằng một lệnh (đầu vào cố định → so với
+  đầu ra đã lưu), ghi lệnh vào `AGENTS.md`. Mức L mà không kiểm tự động được ⇒ đề xuất dựng lưới thành
+  một đợt riêng, làm trước. → [references/testing-net.md](references/testing-net.md) §0
+- **Không chạy được môi trường thật** (Revit / AutoCAD có bản quyền, thiết bị, tài khoản production):
+  tách logic thuần ra để test được; phần còn lại viết **kịch bản thử tay** (bước bấm + kết quả mong
+  đợi + file mẫu) để người dùng chạy, và báo rõ "chưa probe trên <host>".
+
 ## Báo cáo cuối
 
 Theo [references/asking-the-owner.md](references/asking-the-owner.md) §5: kết quả trước, số đo,
@@ -133,6 +169,7 @@ phần **chưa** kiểm, việc ngoài phạm vi phát hiện được, rồi **
 
 | File | Dùng khi |
 |---|---|
+| [references/project-types.md](references/project-types.md) | pha 0 và pha 4: kiểm chứng gì, bẫy gì, phát hành ra sao theo loại dự án |
 | [references/measurement.md](references/measurement.md) | trước khi nói "đã khớp / đã xong / không ảnh hưởng" |
 | [references/testing-net.md](references/testing-net.md) | viết test, đột biến, probe app thật, sổ bất biến |
 | [references/invariants.md](references/invariants.md) | đặt luật mới, biến luật thành check tự động, báo mức bảo vệ (máy / hook / CI / chặn merge) |
