@@ -8,7 +8,8 @@ Bộ tài liệu cho thành viên team khi làm phần mềm / tool mới với 
 |---|---|
 | [`index.html`](index.html) | Trang chủ (GitHub Pages): bắt đầu từ đâu, cài skill, quy trình 8 pha, prompt mẫu, checklist dự án mới, đọc skill |
 | [`guides/github-desktop-claude-code-codex.html`](guides/github-desktop-claude-code-codex.html) | Hướng dẫn A–Z: GitHub, GitHub Desktop, VS Code, Claude Code, Codex |
-| [`skills/careful-engineering/`](skills/careful-engineering/) | Skill cho Claude Code: quy trình làm việc chống hallucination & regression |
+| [`skills/careful-engineering/`](skills/careful-engineering/) | Skill quy trình cho **mọi loại dự án**: chọn mức S/M/L theo rủi ro, 8 pha chống hallucination & regression, cách kiểm chứng theo loại dự án |
+| [`skills/inno-aec/`](skills/inno-aec/) | Skill **riêng INNO**: luật nhà, plugin AutoCAD (.NET, LISP, accoreconsole), add-in Revit, tool tính diện tích / khối lượng, dữ liệu dự án – hợp đồng |
 | [`skills/caveman/`](skills/caveman/), [`ultracave/`](skills/ultracave/), [`megacave/`](skills/megacave/) | Skill giọng trả lời gọn (bật bằng `/caveman`), chép nguyên văn từ [juliusbrussee/caveman](https://github.com/juliusbrussee/caveman), Apache-2.0 |
 | [`starter/`](starter/) | Mẫu `AGENTS.md`, `CLAUDE.md`, `docs/RUNBOOK.md`, `docs/plans/`, `.gitignore` cho repo mới |
 | [`install.ps1`](install.ps1) | Cài các skill bằng một lệnh PowerShell |
@@ -19,8 +20,10 @@ Bộ tài liệu cho thành viên team khi làm phần mềm / tool mới với 
 irm https://darkend16987.github.io/inno-ai-coding-guide/install.ps1 | iex
 ```
 
-Cài cả bốn skill vào `%USERPROFILE%\.claude\skills\<tên skill>` (bản cũ được sao lưu `.bak-<ngày giờ>`).
-Chỉ cài một vài skill: thêm `-Skill careful-engineering,caveman`. Cài cho riêng một repo: chạy tại gốc repo
+Cài cả năm skill vào `%USERPROFILE%\.claude\skills\<tên skill>` (bản cũ được sao lưu `.bak-<ngày giờ>`).
+Chỉ cài một vài skill: thêm `-Skill careful-engineering,caveman`. Thêm `-GlobalMemory` để chép mẫu hướng
+dẫn cá nhân [`starter/global/CLAUDE.md`](starter/global/CLAUDE.md) vào `%USERPROFILE%\.claude\CLAUDE.md`
+(chỉ khi file đó chưa có; đã có thì lưu mẫu cạnh nó thành `CLAUDE.inno-guide.md`). Cài cho riêng một repo: chạy tại gốc repo
 
 ```powershell
 & ([scriptblock]::Create((irm https://darkend16987.github.io/inno-ai-coding-guide/install.ps1))) -Project
@@ -52,6 +55,17 @@ theo [hoangnb24/repository-harness](https://github.com/hoangnb24/repository-harn
 | [`starter/docs/RUNBOOK.md`](starter/docs/RUNBOOK.md) | Cách chạy, biết app đã sẵn sàng, dữ liệu thử, lấy log, dọn dẹp — để AI tự kiểm trên app thật |
 | [`starter/docs/plans/`](starter/docs/plans/) | Kế hoạch việc lớn: `active/` → `completed/` |
 | [`starter/.gitignore`](starter/.gitignore) | `.gitignore` cơ bản |
+| [`starter/global/CLAUDE.md`](starter/global/CLAUDE.md) | Hướng dẫn chung cá nhân, đặt ở `%USERPROFILE%\.claude\CLAUDE.md` (Codex: `%USERPROFILE%\.codex\AGENTS.md`) |
+
+## Ba lớp hướng dẫn
+
+| Lớp | Ở đâu | Chứa gì |
+|---|---|---|
+| 1 · Cá nhân | `~/.claude/CLAUDE.md` + skill `careful-engineering`, `caveman` | Sở thích chung, quy trình đúng cho mọi dự án |
+| 2 · Công ty | skill `inno-aec` | Luật INNO, kiến thức CAD/BIM, tính toán, dữ liệu hợp đồng |
+| 3 · Repo | `AGENTS.md` (+ `CLAUDE.md` chỉ `@AGENTS.md`), `docs/` | Bản đồ repo, lệnh test, host & phiên bản, luật không được phá |
+
+Mâu thuẫn ⇒ `AGENTS.md` của repo > `inno-aec` > `careful-engineering` > CLAUDE.md cá nhân.
 
 ## Skill caveman
 

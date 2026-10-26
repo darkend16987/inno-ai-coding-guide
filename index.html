@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light">
 <title>Làm phần mềm với AI — bộ skill & hướng dẫn GitHub cho team</title>
-<meta name="description" content="Bộ skill careful-engineering và caveman cho Claude Code / Codex, kèm hướng dẫn GitHub Desktop: quy trình làm phần mềm với AI không hallucinate, không regression, có test, memo, handoff — và trả lời gọn, ít token.">
+<meta name="description" content="Bộ skill careful-engineering (mọi loại dự án), inno-aec (plugin AutoCAD / Revit, tool tính toán, dữ liệu hợp đồng của INNO) và caveman cho Claude Code / Codex, kèm hướng dẫn GitHub Desktop: quy trình làm phần mềm với AI không hallucinate, không regression, có test, memo, handoff.">
 <style>
 :root{--bg:#f6f8fb;--paper:#fff;--ink:#172333;--muted:#64748b;--blue:#175cd3;--line:#e2e8f0;--soft:#eff6ff;--shadow:0 12px 36px rgba(15,23,42,.06)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
@@ -65,20 +65,38 @@ table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0}td,th{pad
 details{border:1px solid var(--line);border-radius:10px;margin:9px 0;background:#fff;padding:0 15px}
 summary{padding:12px 2px;cursor:pointer;font-weight:650}details>div{padding:0 2px 12px;color:#45566d}
 .foot{color:#64748b;text-align:center;font-size:13px;padding:15px}
+.layers{display:grid;gap:10px;margin:14px 0}
+.layer{display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;border:1px solid var(--line);border-left:6px solid var(--c);border-radius:12px;padding:14px 16px;background:#fff}
+.layer .lh b{display:block;color:var(--c);font-size:15px}.layer .lh small{color:var(--muted);font-size:12.5px;line-height:1.45;display:block}
+.layer ul{margin:0;padding-left:18px;font-size:14.5px;line-height:1.6}
+.layer .when{font-size:12.5px;color:var(--muted);margin-top:6px}
+.prec{font-size:13.5px;color:#33475f;background:#f7faff;border:1px dashed #c9d9f0;border-radius:10px;padding:9px 14px;text-align:center}
+.tier{display:inline-block;font-weight:800;border-radius:7px;padding:1px 9px;font-size:13px;color:#fff}
+.tier.s{background:#2f855a}.tier.m{background:#b7791f}.tier.l{background:#c53030}
+.pt{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:6px}
+.pt>div{border:1px solid var(--line);border-radius:12px;padding:12px 15px;background:#fbfdff;font-size:14.5px;line-height:1.6}
+.pt h4{margin:0 0 6px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#1d4e9b}
+.pt ul{margin:0;padding-left:18px}
+.pipe{display:flex;flex-wrap:wrap;align-items:stretch;gap:6px;margin:12px 0}
+.pipe div{flex:1 1 150px;border:1px solid #c9d9f0;background:#f4f8ff;border-radius:10px;padding:9px 11px;font-size:13.5px;line-height:1.45}
+.pipe div b{display:block;color:#1d4e9b;font-size:12px;letter-spacing:.06em}
+.pipe .ar{flex:0 0 auto;border:0;background:none;align-self:center;color:#7a8ca5;padding:0;font-size:18px}
+@media(max-width:820px){.layer{grid-template-columns:1fr;gap:6px}.pipe .ar{display:none}}
 @media(max-width:820px){.section{padding:22px 18px}.hero{padding:30px 22px}.viewer{display:block}.filelist{position:static;margin-bottom:12px;display:flex;flex-wrap:wrap;gap:4px}.filelist button{width:auto}.filelist .grp{width:100%}}
 </style>
 </head>
 <body>
 <nav class="topnav"><div class="in"><b>AI Coding Guide</b>
-<a href="#start">Bắt đầu</a><a href="#install">Cài skill</a><a href="#workflow">Quy trình</a><a href="#caveman">Caveman</a><a href="#prompts">Prompt mẫu</a><a href="#newproject">Dự án mới</a><a href="#skill">Đọc skill</a><a href="#faq">Hỏi đáp</a>
+<a href="#start">Bắt đầu</a><a href="#layers">3 lớp</a><a href="#install">Cài skill</a><a href="#workflow">Quy trình</a><a href="#types">Loại dự án</a><a href="#inno">INNO · CAD/BIM</a><a href="#caveman">Caveman</a><a href="#prompts">Prompt mẫu</a><a href="#newproject">Dự án mới</a><a href="#skill">Đọc skill</a><a href="#faq">Hỏi đáp</a>
 </div></nav>
 <div class="wrap">
 
 <header class="hero">
   <div class="eyebrow">Cẩm nang nội bộ cho team</div>
   <h1>Làm phần mềm & tool mới với AI —<br>đúng, chắc, không hồi quy</h1>
-  <p>Hai thứ mỗi thành viên cần: <strong>(1)</strong> biết dùng GitHub + GitHub Desktop + Claude Code / Codex, và <strong>(2)</strong> cài bộ skill <code style="background:#ffffff22;color:#fff">careful-engineering</code> để AI agent làm việc theo một quy trình có kế hoạch, có test, có memo bàn giao — rút ra từ những lỗi đã gặp thật khi làm các dự án của chúng ta. Kèm theo là skill <code style="background:#ffffff22;color:#fff">caveman</code> (bật khi cần) để AI trả lời gọn, bớt chữ thừa trong khung chat.</p>
-  <div class="tagbar"><span class="tag">Windows 10/11</span><span class="tag">Claude Code</span><span class="tag">OpenAI Codex</span><span class="tag">GitHub Desktop</span><span class="tag">Tiếng Việt</span></div>
+  <p>Hai thứ mỗi thành viên cần: <strong>(1)</strong> biết dùng GitHub + GitHub Desktop + Claude Code / Codex, và <strong>(2)</strong> cài bộ skill để AI agent làm việc theo một quy trình có kế hoạch, có test, có memo bàn giao — rút ra từ những lỗi đã gặp thật khi làm các dự án của chúng ta.</p>
+  <p><code style="background:#ffffff22;color:#fff">careful-engineering</code> là quy trình chung cho <strong>mọi loại dự án</strong> (web, bot, ứng dụng LLM, dữ liệu, game…). <code style="background:#ffffff22;color:#fff">inno-aec</code> thêm luật riêng của INNO cho plugin AutoCAD / Revit, tool tính diện tích – khối lượng và dữ liệu dự án – hợp đồng. <code style="background:#ffffff22;color:#fff">caveman</code> (bật khi cần) để AI trả lời gọn.</p>
+  <div class="tagbar"><span class="tag">Windows 10/11</span><span class="tag">Claude Code</span><span class="tag">OpenAI Codex</span><span class="tag">GitHub Desktop</span><span class="tag">AutoCAD · Revit</span><span class="tag">Tiếng Việt</span></div>
 </header>
 
 <section class="section" id="start">
@@ -91,9 +109,38 @@ summary{padding:12px 2px;cursor:pointer;font-weight:650}details>div{padding:0 2p
   <div class="tip"><strong>Nhớ một câu:</strong> AI sửa file trên máy bạn — <strong>bạn</strong> là người review diff, chạy thử, rồi mới Commit → Push. Skill giúp AI tự kiểm chứng kỹ hơn, nhưng không thay được bước review của bạn.</div>
 </section>
 
+<section class="section" id="layers">
+  <h2>Ba lớp hướng dẫn — cái gì để ở đâu</h2>
+  <p>AI đọc hướng dẫn từ ba nơi. Mỗi điều chỉ nên nằm ở <strong>một</strong> lớp — lớp thấp nhất mà nó đúng cho mọi trường hợp. Điều đúng cho mọi dự án của bạn để ở lớp 1; điều đúng cho mọi dự án INNO để ở lớp 2; điều chỉ đúng cho một repo để ở lớp 3.</p>
+  <div class="layers">
+    <div class="layer" style="--c:#2559a8">
+      <div class="lh"><b>1 · Cá nhân (global)</b><small>Theo người, đi theo máy. Mọi dự án.</small></div>
+      <div><ul>
+        <li><code>%USERPROFILE%\.claude\CLAUDE.md</code> — vài dòng sở thích chung: tiếng Việt, Windows, không push khi chưa bảo, dùng skill nào khi nào. <a href="starter/global/CLAUDE.md">Mẫu</a> · cài bằng <code>-GlobalMemory</code>.</li>
+        <li>Skill <strong>careful-engineering</strong> — quy trình S/M/L + 8 pha, cách kiểm chứng theo <a href="#types">loại dự án</a>.</li>
+        <li>Skill <strong>caveman</strong> — giọng trả lời gọn (tuỳ thích).</li>
+      </ul><div class="when">Nạp: <code>CLAUDE.md</code> ở mọi phiên; skill khi việc khớp mô tả hoặc gõ <code>/careful-engineering</code>.</div></div>
+    </div>
+    <div class="layer" style="--c:#b7791f">
+      <div class="lh"><b>2 · Công ty INNO</b><small>Theo lĩnh vực. Mọi repo INNO.</small></div>
+      <div><ul>
+        <li>Skill <strong>inno-aec</strong> — luật nhà (git trước khi sửa, dữ liệu khách hàng không ra ngoài, số liệu quyết định = mức L), plugin AutoCAD / LISP / Revit, tool tính diện tích – khối lượng, dữ liệu dự án – hợp đồng.</li>
+      </ul><div class="when">Nạp: khi việc chạm AutoCAD, Revit, bản vẽ, diện tích, hợp đồng, tiền VND… hoặc gõ <code>/inno-aec</code>.</div></div>
+    </div>
+    <div class="layer" style="--c:#2f855a">
+      <div class="lh"><b>3 · Từng repo</b><small>Theo dự án. Đi theo git.</small></div>
+      <div><ul>
+        <li><code>AGENTS.md</code> (nguồn duy nhất) + <code>CLAUDE.md</code> (chỉ <code>@AGENTS.md</code>) — bản đồ repo, lệnh test, host &amp; phiên bản, luật không được phá.</li>
+        <li><code>docs/RUNBOOK.md</code>, <code>docs/HANDOFF.md</code>, <code>docs/plans/</code>, sổ bất biến, quyết định.</li>
+      </ul><div class="when">Nạp: <code>CLAUDE.md</code>/<code>AGENTS.md</code> mỗi phiên trong repo; <code>docs/</code> khi cần. Mẫu: <a href="#newproject">Dự án mới</a>.</div></div>
+    </div>
+  </div>
+  <div class="prec">Khi mâu thuẫn: <strong>AGENTS.md của repo</strong> &gt; <strong>inno-aec</strong> &gt; <strong>careful-engineering</strong> &gt; CLAUDE.md cá nhân &gt; thói quen chung của AI</div>
+</section>
+
 <section class="section" id="install">
   <h2>Cài bộ skill</h2>
-  <p>Bộ skill gồm <code>careful-engineering</code> (quy trình làm việc) và nhóm caveman: <code>caveman</code>, <code>ultracave</code>, <code>megacave</code> (giọng trả lời gọn — <a href="#caveman">xem mục Caveman</a>). Lệnh cài mặc định chép cả bốn.</p>
+  <p>Bộ skill gồm <code>careful-engineering</code> (quy trình, mọi dự án), <code>inno-aec</code> (luật INNO, CAD/BIM, tính toán, dữ liệu hợp đồng) và nhóm caveman: <code>caveman</code>, <code>ultracave</code>, <code>megacave</code> (giọng trả lời gọn — <a href="#caveman">xem mục Caveman</a>). Lệnh cài mặc định chép cả năm. <code>inno-aec</code> chỉ được nạp khi việc thuộc lĩnh vực của nó, nên cài cho máy cũng không làm phiền các dự án khác.</p>
   <div class="tabs" role="tablist" aria-label="Cách cài">
     <button role="tab" aria-selected="true" data-tab="user">Claude Code — cho cả máy (khuyến nghị)</button>
     <button role="tab" aria-selected="false" data-tab="project">Claude Code — cho một repo</button>
@@ -106,17 +153,19 @@ summary{padding:12px 2px;cursor:pointer;font-weight:650}details>div{padding:0 2p
     <p>Mỗi skill được chép vào <code>%USERPROFILE%\.claude\skills\&lt;tên skill&gt;</code>. Nếu đã có bản cũ, bản cũ được đổi tên thành <code>…\&lt;tên skill&gt;.bak-&lt;ngày giờ&gt;</code> (không mất).</p>
     <p>Chỉ muốn cài một vài skill: thêm <code>-Skill</code> (cách nhau bằng dấu phẩy):</p>
     <div class="copyline"><button class="btn copy" data-copy-target="inst-one">Sao chép</button><pre><code id="inst-one">&amp; ([scriptblock]::Create((irm https://darkend16987.github.io/inno-ai-coding-guide/install.ps1))) -Skill careful-engineering,caveman</code></pre></div>
-    <p><strong>Kiểm tra:</strong> mở một phiên Claude Code <em>mới</em>, gõ <code>/careful-engineering</code> hoặc <code>/caveman</code>, hoặc hỏi <em>"Which skills are available?"</em> — phải thấy các skill vừa cài.</p>
+    <p>Thêm hướng dẫn chung cá nhân (lớp 1) cùng lúc: thêm <code>-GlobalMemory</code>. Script chỉ tạo <code>%USERPROFILE%\.claude\CLAUDE.md</code> khi file đó <strong>chưa có</strong>; đã có thì để nguyên và lưu mẫu cạnh nó thành <code>CLAUDE.inno-guide.md</code> để bạn tự gộp.</p>
+    <div class="copyline"><button class="btn copy" data-copy-target="inst-global">Sao chép</button><pre><code id="inst-global">&amp; ([scriptblock]::Create((irm https://darkend16987.github.io/inno-ai-coding-guide/install.ps1))) -GlobalMemory</code></pre></div>
+    <p><strong>Kiểm tra:</strong> mở một phiên Claude Code <em>mới</em>, gõ <code>/careful-engineering</code>, <code>/inno-aec</code> hoặc <code>/caveman</code>, hoặc hỏi <em>"Which skills are available?"</em> — phải thấy các skill vừa cài.</p>
   </div>
   <div class="tabpanel" data-panel="project" hidden>
     <p>Dùng khi muốn skill <strong>đi theo repo</strong> (ai clone repo cũng có). Mở PowerShell <strong>tại thư mục gốc của repo</strong> rồi chạy:</p>
     <div class="copyline"><button class="btn copy" data-copy-target="inst-proj">Sao chép</button><pre><code id="inst-proj">&amp; ([scriptblock]::Create((irm https://darkend16987.github.io/inno-ai-coding-guide/install.ps1))) -Project</code></pre></div>
-    <p>Skill vào <code>.claude\skills\&lt;tên skill&gt;</code> của repo. Commit thư mục đó bằng GitHub Desktop như mọi file khác. Có thể ghép <code>-Project -Skill careful-engineering</code> để chỉ đưa skill quy trình vào repo — caveman là sở thích cá nhân, nên cài cho máy.</p>
+    <p>Skill vào <code>.claude\skills\&lt;tên skill&gt;</code> của repo. Commit thư mục đó bằng GitHub Desktop như mọi file khác. Có thể ghép <code>-Project -Skill careful-engineering,inno-aec</code> để chỉ đưa skill quy trình (và luật INNO, với repo của công ty) vào repo — caveman là sở thích cá nhân, nên cài cho máy.</p>
   </div>
   <div class="tabpanel" data-panel="codex" hidden>
     <p>Codex và nhiều agent khác đọc file <code>AGENTS.md</code> ở gốc repo. Cách chắc chắn chạy được với mọi phiên bản:</p>
     <ol>
-      <li>Chép thư mục <code>skills/careful-engineering</code> của repo này vào repo dự án (giữ nguyên đường dẫn <code>skills/careful-engineering/</code>).</li>
+      <li>Chép thư mục <code>skills/careful-engineering</code> (và <code>skills/inno-aec</code> với repo INNO) của repo này vào repo dự án, giữ nguyên đường dẫn <code>skills/…/</code>. Hướng dẫn chung cá nhân của Codex đặt ở <code>%USERPROFILE%\.codex\AGENTS.md</code> (dùng cùng <a href="starter/global/CLAUDE.md">mẫu</a>).</li>
       <li>Chép <a href="starter/AGENTS.md"><code>starter/AGENTS.md</code></a> và <a href="starter/CLAUDE.md"><code>starter/CLAUDE.md</code></a> vào gốc repo dự án. <code>AGENTS.md</code> là nguồn hướng dẫn duy nhất (bảo agent làm theo <code>skills/careful-engineering/SKILL.md</code>); <code>CLAUDE.md</code> chỉ có dòng <code>@AGENTS.md</code> để Claude Code đọc cùng nội dung — không phải giữ hai bản.</li>
     </ol>
     <p>Nếu phiên bản Codex của bạn hỗ trợ "Agent Skills" (thư mục skill riêng của Codex), có thể đặt thư mục skill vào đó theo <a href="https://github.com/openai/codex" target="_blank" rel="noopener">tài liệu chính thức của Codex</a>; cách <code>AGENTS.md</code> ở trên vẫn là cách dự phòng.</p>
@@ -124,7 +173,7 @@ summary{padding:12px 2px;cursor:pointer;font-weight:650}details>div{padding:0 2p
   <div class="tabpanel" data-panel="manual" hidden>
     <ol>
       <li>Tải <a href="https://github.com/darkend16987/inno-ai-coding-guide/archive/refs/heads/main.zip">bản ZIP của repo</a> và giải nén.</li>
-      <li>Chép các thư mục trong <code>skills\</code> (<code>careful-engineering</code>, <code>caveman</code>, <code>ultracave</code>, <code>megacave</code>) vào <code>%USERPROFILE%\.claude\skills\</code> (tạo thư mục nếu chưa có).</li>
+      <li>Chép các thư mục trong <code>skills\</code> (<code>careful-engineering</code>, <code>inno-aec</code>, <code>caveman</code>, <code>ultracave</code>, <code>megacave</code>) vào <code>%USERPROFILE%\.claude\skills\</code> (tạo thư mục nếu chưa có).</li>
       <li>Kết quả phải là <code>%USERPROFILE%\.claude\skills\careful-engineering\SKILL.md</code>, <code>…\caveman\SKILL.md</code>, v.v.</li>
     </ol>
   </div>
@@ -132,10 +181,19 @@ summary{padding:12px 2px;cursor:pointer;font-weight:650}details>div{padding:0 2p
 </section>
 
 <section class="section" id="workflow">
-  <h2>Quy trình 8 pha mà skill bắt AI làm theo</h2>
-  <p>Mỗi pha có một <strong>phép kiểm</strong> — AI chỉ chuyển pha khi kiểm xong. Việc vặt (sửa chính tả, một dòng hiển nhiên) được rút gọn, nhưng <strong>pha 4 và pha 6 không bao giờ bỏ</strong>.</p>
+  <h2>Quy trình: chọn mức, rồi đi đúng các pha</h2>
+  <p>Đầu mỗi việc, AI chọn <strong>mức</strong> theo rủi ro và nói ra một dòng (ví dụ <em>"Mức: M — vì chạm module xuất Excel, revert được"</em>). Mức quyết định làm những pha nào — việc nhỏ không phải đi đủ 8 pha, việc chạm tiền hay dữ liệu thật thì không được bỏ pha nào.</p>
+  <div class="table-wrap"><table>
+    <tr><th style="width:110px">Mức</th><th>Khi nào</th><th>Phải làm</th></tr>
+    <tr><td><span class="tier s">S · Nhỏ</span></td><td>Sửa chữ, cấu hình cục bộ, một chỗ hiển nhiên; không đổi hành vi người khác thấy, không chạm dữ liệu</td><td>Đọc file đích + tìm chỗ dùng · sửa · kiểm cú pháp + test liên quan · commit an toàn</td></tr>
+    <tr><td><span class="tier m">M · Chuẩn</span></td><td>Tính năng / sửa lỗi trong một vùng, lùi được bằng revert</td><td>Pha 0–4 và 6 · handoff ngắn · test của lỗi đã sửa phải đỏ được (đột biến)</td></tr>
+    <tr><td><span class="tier l">L · Nghiêm</span></td><td>Dữ liệu nghiệp vụ, schema / migration, production, nhiều module, bản phát hành, <strong>con số người khác dùng để ra quyết định</strong> (tiền, diện tích, khối lượng, hợp đồng)</td><td>Đủ 8 pha · memo kế hoạch, <strong>chờ duyệt</strong> rồi mới sửa · đột biến · thử trên app thật có so với mã cũ · sổ bất biến</td></tr>
+  </table></div>
+  <p>Phân vân thì chọn mức cao hơn; giữa chừng thấy rủi ro lớn hơn thì AI phải nâng mức và làm bù. Ở <strong>mọi</strong> mức: không bịa, kiểm chứng trước khi nói xong, commit an toàn. Skill cũng có lối riêng cho <strong>dự án mới</strong> (dựng khung chạy được trước), <strong>prototype</strong> (được bỏ ghi sổ, ghi rõ chưa dùng thật được), <strong>repo chưa có test</strong> (chụp hành vi hiện tại thành golden test trước khi sửa) và <strong>không chạy được môi trường thật</strong> (kịch bản thử tay).</p>
+  <h3>8 pha</h3>
+  <p>Mỗi pha có một <strong>phép kiểm</strong> — AI chỉ chuyển pha khi kiểm xong.</p>
   <div class="phases">
-    <div class="phase"><b>0 · Định hướng</b><small>Đọc AGENTS.md / CLAUDE.md, sổ bất biến, kế hoạch đang làm, handoff gần nhất; <code>git status</code>; grep mọi nơi bị ảnh hưởng; biết mình chạy được gì (test, app, DB, CI).</small><div class="v">✓ Liệt kê được điểm chạm, luật liên quan, cái chưa kiểm được</div></div>
+    <div class="phase"><b>0 · Định hướng</b><small>Đọc AGENTS.md / CLAUDE.md, sổ bất biến, kế hoạch đang làm, handoff gần nhất; <code>git status</code> (chưa có git ⇒ dừng, đề xuất <code>git init</code>); grep mọi nơi bị ảnh hưởng; biết mình chạy được gì (test, app, DB, CI).</small><div class="v">✓ Liệt kê được điểm chạm, luật liên quan, cái chưa kiểm được</div></div>
     <div class="phase"><b>1 · Hiểu đúng yêu cầu</b><small>Viết lại yêu cầu + tiêu chí thành công đo được. Mơ hồ thật ⇒ hỏi. Lỗi ⇒ tái hiện có chủ đích.</small><div class="v">✓ Có số đo "trước khi sửa"</div></div>
     <div class="phase"><b>2 · Thiết kế & kế hoạch</b><small>Nguyên nhân gốc, phương án ít thay đổi nhất, các bước kèm cách kiểm. Việc lớn ⇒ memo kế hoạch, chia đợt.</small><div class="v">✓ Mỗi bước có verify</div></div>
     <div class="phase"><b>3 · Thực hiện</b><small>Chạy test trước khi sửa; sửa đúng chỗ, đúng style; không thêm ngoài kế hoạch.</small><div class="v">✓ Cú pháp + test liên quan sau mỗi bước</div></div>
@@ -154,6 +212,109 @@ summary{padding:12px 2px;cursor:pointer;font-weight:650}details>div{padding:0 2p
     <li><strong>Thao tác khó lùi / ra ngoài</strong> (push, deploy, xoá, migration production) ⇒ phải có phép rõ ràng.</li>
   </ul>
   <p>Nền tảng: <a href="https://github.com/multica-ai/andrej-karpathy-skills" target="_blank" rel="noopener">4 nguyên tắc của Andrej Karpathy</a> — nghĩ trước khi code · đơn giản trước · sửa đúng chỗ · chạy theo mục tiêu kiểm chứng được.</p>
+</section>
+
+<section class="section" id="types">
+  <h2>Theo loại dự án — "chạy thật" nghĩa là gì</h2>
+  <p>Quy trình giống nhau; khác nhau ở <strong>cách kiểm chứng</strong> (pha 4), <strong>bẫy hay gặp</strong> và <strong>cách phát hành</strong>. Chọn loại gần nhất với dự án của bạn. Bản đầy đủ: <a href="#skill=careful-engineering/references/project-types.md" class="jump" data-file="careful-engineering/references/project-types.md">project-types.md</a>.</p>
+  <div class="tabs" role="tablist" aria-label="Loại dự án">
+    <button role="tab" aria-selected="true" data-tab="web">Web app</button>
+    <button role="tab" aria-selected="false" data-tab="api">API / worker</button>
+    <button role="tab" aria-selected="false" data-tab="desk">Desktop</button>
+    <button role="tab" aria-selected="false" data-tab="cad">Plugin CAD/BIM</button>
+    <button role="tab" aria-selected="false" data-tab="calc">Tool tính toán</button>
+    <button role="tab" aria-selected="false" data-tab="script">Script / CLI</button>
+    <button role="tab" aria-selected="false" data-tab="bot">Bot · scraper</button>
+    <button role="tab" aria-selected="false" data-tab="llm">Ứng dụng LLM</button>
+    <button role="tab" aria-selected="false" data-tab="data">Dữ liệu · hợp đồng</button>
+    <button role="tab" aria-selected="false" data-tab="ml">ML · chứng khoán</button>
+    <button role="tab" aria-selected="false" data-tab="game">Game · sự kiện</button>
+  </div>
+  <div class="tabpanel" data-panel="web"><div class="pt">
+    <div><h4>Kiểm chứng</h4><ul><li><code>build</code> sạch, không chỉ <code>dev</code> chạy được</li><li>Mở trang thật, đi đúng hành trình người dùng, đo cả dữ liệu đã ghi</li><li>Đổi rules / RLS ⇒ test trên emulator / DB nháp, thử cả chiều <em>bị cấm</em></li></ul></div>
+    <div><h4>Bẫy</h4><ul><li>Next.js bản mới đổi API — đọc tài liệu đi kèm gói đã cài</li><li><code>service_role</code> / Admin SDK bỏ qua RLS — chỉ ở server, không bao giờ <code>NEXT_PUBLIC_</code></li><li>Tự viết đăng nhập ⇒ mọi API tự kiểm quyền</li><li>Tiền là số nguyên</li></ul></div>
+    <div><h4>Phát hành</h4><ul><li>Vercel / Firebase thường deploy khi push ⇒ push = phát hành</li><li>Sau deploy mở URL thật</li></ul></div>
+  </div></div>
+  <div class="tabpanel" data-panel="api" hidden><div class="pt">
+    <div><h4>Kiểm chứng</h4><ul><li>Gọi endpoint thật trên server local, kiểm response <em>và</em> trạng thái đã ghi</li><li>Job định kỳ có lệnh chạy một lần bằng tay</li></ul></div>
+    <div><h4>Bẫy</h4><ul><li><code>except: pass</code> ⇒ 200 rỗng</li><li>Thiếu timeout / retry; job chạy chồng</li><li>Server UTC, người dùng UTC+7</li></ul></div>
+    <div><h4>Phát hành</h4><ul><li>Build image từ đúng commit, thử chính image đó</li><li>Health check + log khởi động sau deploy</li></ul></div>
+  </div></div>
+  <div class="tabpanel" data-panel="desk" hidden><div class="pt">
+    <div><h4>Kiểm chứng</h4><ul><li>Tách logic khỏi giao diện để test</li><li>Điều khiển app thật bằng chuột/phím, đo <em>file đã lưu</em></li></ul></div>
+    <div><h4>Bẫy</h4><ul><li>Sidecar (PyInstaller, .NET) lệch phiên bản</li><li>Đường dẫn có dấu / dấu cách; <code>Program Files</code> chỉ đọc</li><li>Build bị kill vẫn để lại bộ cài "trông như thật"</li></ul></div>
+    <div><h4>Phát hành</h4><ul><li>Kiểm chính bộ cài trên đĩa (kích thước, version), cài thử trên máy sạch</li></ul></div>
+  </div></div>
+  <div class="tabpanel" data-panel="cad" hidden><div class="pt">
+    <div><h4>Kiểm chứng</h4><ul><li>Logic thuần ở thư viện <code>Core</code> — unit test không cần AutoCAD/Revit</li><li>AutoCAD: test trong <code>accoreconsole.exe</code> (không giao diện), profile cách ly</li><li>Revit: runner trong Revit hoặc kịch bản thử tay</li></ul></div>
+    <div><h4>Bẫy</h4><ul><li>Đúng năm host: 2025+ là .NET 8, 2021–2024 là .NET Framework 4.8</li><li><code>SECURELOAD</code> chặn DLL ngoài vùng tin cậy</li><li>Revit đơn vị nội bộ là feet; API không được gọi từ thread phụ</li><li>Font TCVN3 / VNI trong bản vẽ</li></ul></div>
+    <div><h4>Phát hành</h4><ul><li>Bundle autoloader / <code>.addin</code> đúng năm</li><li>Thử GUI + 2–3 máy đồng nghiệp trước khi phát hành rộng</li></ul></div>
+  </div><p>Chi tiết: <a href="#inno">mục INNO · CAD/BIM</a>.</p></div>
+  <div class="tabpanel" data-panel="calc" hidden><div class="pt">
+    <div><h4>Kiểm chứng</h4><ul><li>Golden test với số <strong>người trong nghề đã kiểm tay</strong></li><li>Đối chiếu với lệnh <code>AREA</code> / schedule Revit</li><li>Tổng các phần = tổng sàn; số tính + số bị loại = số đầu vào</li></ul></div>
+    <div><h4>Bẫy</h4><ul><li>Định nghĩa diện tích (tim tường / thông thủy / phủ bì) phải có căn cứ</li><li>Polyline hở, tự cắt, có cung, có lỗ; block bị scale</li><li><code>Math.Round</code> / <code>round()</code> làm tròn về số chẵn — Excel thì không</li></ul></div>
+    <div><h4>Báo cáo</h4><ul><li>Ghi phiên bản tool, đơn vị, quy tắc tính, dung sai, danh sách đối tượng bị loại</li></ul></div>
+  </div></div>
+  <div class="tabpanel" data-panel="script" hidden><div class="pt">
+    <div><h4>Kiểm chứng</h4><ul><li>Chạy trên <strong>bản sao</strong> thư mục / file thật</li><li>Có <code>--dry-run</code>; so đầu ra với golden file</li></ul></div>
+    <div><h4>Bẫy</h4><ul><li>Ghi đè nguồn không có đường lùi</li><li>Excel bị khoá khi đang mở; COM để lại <code>EXCEL.EXE</code></li><li>CSV có BOM; PowerShell 5.1 và tiếng Việt</li></ul></div>
+    <div><h4>Phát hành</h4><ul><li>Một lệnh chạy được trên máy người khác; không hard-code đường dẫn máy mình</li></ul></div>
+  </div></div>
+  <div class="tabpanel" data-panel="bot" hidden><div class="pt">
+    <div><h4>Kiểm chứng</h4><ul><li>Bot: test bộ xử lý tin bằng tin giả; thử thật trong <em>nhóm thử</em></li><li>Scraper: lưu trang mẫu thật vào <code>tests/fixtures/</code>, test parser trên đó</li></ul></div>
+    <div><h4>Bẫy</h4><ul><li>Gửi tin là không lùi được ⇒ chế độ thử + giới hạn số tin</li><li>Thư viện không chính thức (Zalo cá nhân, Facebook) có thể làm khoá tài khoản</li><li>Scraper trả 0 kết quả phải là <strong>lỗi</strong>, không phải thành công</li></ul></div>
+    <div><h4>Phát hành</h4><ul><li>Token là secret; một token chỉ một tiến trình polling</li><li>Cảnh báo khi số bản ghi lệch bất thường</li></ul></div>
+  </div></div>
+  <div class="tabpanel" data-panel="llm" hidden><div class="pt">
+    <div><h4>Kiểm chứng</h4><ul><li>Bộ đánh giá 10–30 ca thật có tiêu chí; báo <code>đạt 27/30</code> trước và sau đổi prompt / model</li><li>Chấm bằng luật trước (JSON hợp lệ, số khớp nguồn), LLM-chấm sau</li></ul></div>
+    <div><h4>Bẫy</h4><ul><li>SDK đổi nhanh — Gemini dùng <code>google-genai</code>, không phải gói cũ</li><li>Trích xuất số liệu được phép trả "không tìm thấy", không được đoán</li><li>Prompt injection từ tài liệu người dùng</li></ul></div>
+    <div><h4>Phát hành</h4><ul><li>Khoá API ở server; giới hạn số lần gọi</li><li>Log model + phiên bản prompt</li></ul></div>
+  </div></div>
+  <div class="tabpanel" data-panel="data" hidden><div class="pt">
+    <div><h4>Kiểm chứng</h4><ul><li>Khối đối soát số dòng + tổng tiền trong script (lệch là dừng)</li><li>Chạy hai lần không đổi gì; thử trên DB nháp ở trạng thái production</li><li>Test quyền từng vai trò</li></ul></div>
+    <div><h4>Bẫy</h4><ul><li>Danh mục INNO tự khai đứng trên suy luận thống kê</li><li>Mã là chuỗi (mất số 0 đầu); VAT lưu như chứng từ</li><li>Dữ liệu cá nhân: CCCD, lương, SĐT</li></ul></div>
+    <div><h4>Đọc thêm</h4><ul><li><a href="#skill=careful-engineering/references/data-migration.md" class="jump" data-file="careful-engineering/references/data-migration.md">data-migration.md</a> · <a href="#skill=inno-aec/references/business-data.md" class="jump" data-file="inno-aec/references/business-data.md">business-data.md</a></li></ul></div>
+  </div></div>
+  <div class="tabpanel" data-panel="ml" hidden><div class="pt">
+    <div><h4>Kiểm chứng</h4><ul><li>Tách dữ liệu theo <strong>thời gian</strong>, không xáo ngẫu nhiên</li><li>So với mốc đơn giản (mua-giữ) — không thắng mốc thì chưa có gì</li></ul></div>
+    <div><h4>Bẫy</h4><ul><li>Rò rỉ tương lai (dùng giá đóng cửa hôm nay để quyết định hôm nay)</li><li>Bỏ qua phí, thuế, biên độ, T+</li><li>Thư viện dữ liệu đổi API giữa các thế hệ</li></ul></div>
+    <div><h4>Trình bày</h4><ul><li>Tham khảo, không phải khuyến nghị đầu tư; ghi giai đoạn backtest và giả định</li></ul></div>
+  </div></div>
+  <div class="tabpanel" data-panel="game" hidden><div class="pt">
+    <div><h4>Kiểm chứng</h4><ul><li>Luật chơi là tài liệu nguồn sự thật (<code>docs/RULES.md</code>)</li><li>Golden test cho bảng điểm: hoà, huỷ trận, nộp trễ, chấp lẻ</li></ul></div>
+    <div><h4>Bẫy</h4><ul><li>Gian lận bình chọn ⇒ chặn ở server / rules, không ở giao diện</li><li>Hạn chót theo giờ server</li></ul></div>
+    <div><h4>Phát hành</h4><ul><li>Sự kiện có giờ cố định ⇒ đóng băng thay đổi trước giờ chạy</li></ul></div>
+  </div></div>
+</section>
+
+<section class="section" id="inno">
+  <h2>INNO · plugin CAD/BIM, tool tính toán, dữ liệu dự án</h2>
+  <p>Skill <code>inno-aec</code> là lớp công ty: nó không lặp lại quy trình, chỉ thêm luật và kinh nghiệm riêng của lĩnh vực. Phần AutoCAD đã được <strong>đo thật</strong> trên một plugin AutoCAD 2024 của team; phần Revit hiện là kiến thức chung về API (team chưa có dự án Revit) — dự án Revit đầu tiên nên kiểm lại và gửi bổ sung.</p>
+  <h3>Luật nhà</h3>
+  <ol>
+    <li><strong>Có git trước khi sửa.</strong> Thư mục chưa là repo ⇒ <code>git init</code>, <code>.gitignore</code>, commit nguyên trạng, tạo repo Private — rồi mới cho AI sửa.</li>
+    <li><strong>Con số người khác dùng để ra quyết định = mức L</strong>: diện tích, GFA, khối lượng, tiền hợp đồng, lương.</li>
+    <li><strong>Dữ liệu khách hàng và công ty không ra ngoài</strong>: không vào repo public, không gửi API LLM bên ngoài khi chưa được duyệt; mẫu thử đã ẩn danh.</li>
+    <li><strong><code>AGENTS.md</code> ghi host &amp; phiên bản</strong>: AutoCAD / Revit năm nào, target .NET, lệnh test ngoài host và trong host, nơi phát hành.</li>
+    <li><strong>Plugin phát hành</strong>: thử GUI + ít nhất 2 máy đồng nghiệp; có cài <em>và gỡ</em>; hiển thị version; không tự đổi cài đặt bảo mật của máy người dùng.</li>
+    <li><strong>LLM mặc định:</strong> Gemini qua <code>google-genai</code>. <strong>Tiền VND:</strong> số nguyên.</li>
+  </ol>
+  <h3>Kiểm chứng plugin AutoCAD mà không cần mở AutoCAD</h3>
+  <div class="pipe">
+    <div><b>1 · BUILD</b>Plugin + DLL test có lệnh <code>…_SELFTEST</code></div><div class="ar">→</div>
+    <div><b>2 · SCRIPT .SCR</b>ASCII: <code>TRUSTEDPATHS</code>, <code>NETLOAD</code>, lệnh tự kiểm, <code>QUIT</code></div><div class="ar">→</div>
+    <div><b>3 · ACCORECONSOLE</b><code>/isolate</code> profile riêng — không đụng cài đặt AutoCAD thật</div><div class="ar">→</div>
+    <div><b>4 · ĐỌC LOG</b><code>fail=0</code> và số kiểm tra &gt; 0; plot PNG để xem bằng mắt</div>
+  </div>
+  <p>Palette, ribbon, hộp thoại, nhấp đúp không chạy được trong accoreconsole ⇒ kịch bản thử tay trên GUI trong <code>docs/RUNBOOK.md</code>, và báo cáo phải ghi "chưa thử trên GUI".</p>
+  <h3>Đọc trong skill</h3>
+  <div class="cards">
+    <div class="card"><div class="num">AUTOCAD</div><h3>.NET, LISP, accoreconsole</h3><p>Target theo năm, Transaction, LockDocument, SECURELOAD, bundle autoloader, LISPSYS, đọc DWG ngoài AutoCAD, TCVN3 / VNI.</p><a class="btn jump" href="#skill=inno-aec/references/autocad.md" data-file="inno-aec/references/autocad.md">Mở autocad.md →</a></div>
+    <div class="card"><div class="num">REVIT</div><h3>Add-in theo năm</h3><p>.NET 8 ↔ 4.8, đơn vị feet, Transaction, ExternalEvent, <code>.addin</code>, xung đột DLL, test khi không có chế độ không giao diện.</p><a class="btn jump" href="#skill=inno-aec/references/revit.md" data-file="inno-aec/references/revit.md">Mở revit.md →</a></div>
+    <div class="card"><div class="num">TÍNH TOÁN</div><h3>Diện tích, GFA, khối lượng</h3><p>Định nghĩa có căn cứ, đơn vị bản vẽ, bẫy hình học, làm tròn khác Excel, golden test, đối chiếu chéo.</p><a class="btn jump" href="#skill=inno-aec/references/calc-quantities.md" data-file="inno-aec/references/calc-quantities.md">Mở calc-quantities.md →</a></div>
+    <div class="card"><div class="num">DỮ LIỆU</div><h3>Dự án, hợp đồng, nhân sự</h3><p>Nguồn Excel / hệ thống nội bộ, tiền &amp; VAT, mã là chuỗi, máy trạng thái hợp đồng, dữ liệu cá nhân, quyền truy cập.</p><a class="btn jump" href="#skill=inno-aec/references/business-data.md" data-file="inno-aec/references/business-data.md">Mở business-data.md →</a></div>
+  </div>
+  <div class="warning"><strong>INNO cần chốt</strong> (skill đang dặn AI hỏi khi gặp): kênh phát hành plugin nội bộ và người duyệt · các năm AutoCAD / Revit công ty đang dùng thực tế · loại dữ liệu nào được gửi tới API LLM bên ngoài.</div>
 </section>
 
 <section class="section" id="caveman">
@@ -182,7 +343,7 @@ summary{padding:12px 2px;cursor:pointer;font-weight:650}details>div{padding:0 2p
   <h2>Prompt mẫu — sao chép, sửa phần &lt;…&gt;</h2>
   <div class="prompt"><h4>1. Làm quen một repo (chưa sửa gì)</h4><p id="p1">Dùng skill careful-engineering, pha 0. Đọc AGENTS.md / CLAUDE.md / README / cấu trúc thư mục và giải thích bằng tiếng Việt: dự án làm gì, công nghệ, cách chạy và chạy test, các file quan trọng, những chỗ dễ vỡ. Chỉ đọc và báo cáo — chưa sửa file nào. Chỗ nào không chắc thì nói là không chắc.</p><button class="btn copy" data-copy-target="p1">Sao chép</button></div>
   <div class="prompt"><h4>2. Làm một tính năng</h4><p id="p2">Dùng skill careful-engineering để làm: &lt;mô tả tính năng&gt;.
-Trước khi sửa: viết lại yêu cầu bằng lời của bạn + tiêu chí thành công đo được, các file sẽ chạm, kế hoạch từng bước kèm cách kiểm chứng, và những gì tuyệt đối không được đổi. Chỗ nào mơ hồ thì hỏi tôi (kèm phương án bạn khuyến nghị). Chờ tôi duyệt kế hoạch rồi mới sửa.
+Trước khi sửa: nói mức (S/M/L) và vì sao, viết lại yêu cầu bằng lời của bạn + tiêu chí thành công đo được, các file sẽ chạm, kế hoạch từng bước kèm cách kiểm chứng, và những gì tuyệt đối không được đổi. Chỗ nào mơ hồ thì hỏi tôi (kèm phương án bạn khuyến nghị). Chờ tôi duyệt kế hoạch rồi mới sửa.
 Khi làm: test trước và sau, test mới phải đỏ được, chạy thử trên app thật, báo cáo bằng số đo và nói rõ phần nào chưa kiểm.</p><button class="btn copy" data-copy-target="p2">Sao chép</button></div>
   <div class="prompt"><h4>3. Sửa một lỗi</h4><p id="p3">Dùng skill careful-engineering. Lỗi: &lt;mô tả triệu chứng, cách bấm để thấy lỗi&gt;.
 Bắt buộc: (1) tái hiện lỗi có chủ đích và ghi số đo trước khi sửa; (2) tìm nguyên nhân gốc, không vá triệu chứng; (3) viết test tái hiện lỗi — phải đỏ trên mã cũ; (4) sửa; (5) chạy toàn bộ test + thử trên app thật, so với mã cũ; (6) ghi một mục vào sổ chống hồi quy. Không sửa gì ngoài phạm vi lỗi này — thấy lỗi khác thì báo riêng.</p><button class="btn copy" data-copy-target="p3">Sao chép</button></div>
@@ -191,6 +352,10 @@ Bắt buộc: (1) tái hiện lỗi có chủ đích và ghi số đo trước k
   <div class="prompt"><h4>6. Khởi tạo dự án mới</h4><p id="p6">Dùng skill careful-engineering. Khởi tạo dự án &lt;tên&gt; bằng &lt;công nghệ&gt; trong thư mục hiện tại: tạo AGENTS.md theo mẫu https://darkend16987.github.io/inno-ai-coding-guide/starter/AGENTS.md (điền đúng lệnh chạy và test), CLAUDE.md theo mẫu https://darkend16987.github.io/inno-ai-coding-guide/starter/CLAUDE.md (chỉ nhập AGENTS.md), docs/RUNBOOK.md theo mẫu https://darkend16987.github.io/inno-ai-coding-guide/starter/docs/RUNBOOK.md (chỉ ghi điều đã chạy thật, còn lại để CHƯA BIẾT), .gitignore phù hợp, docs/HANDOFF.md, một test chạy được ngay, và README ngắn. Chưa viết tính năng. Cuối cùng liệt kê file đã tạo và lệnh để tôi kiểm tra.</p><button class="btn copy" data-copy-target="p6">Sao chép</button></div>
   <div class="prompt"><h4>7. Viết / cập nhật RUNBOOK (để AI tự kiểm trên app thật)</h4><p id="p7">Dùng skill careful-engineering. Viết hoặc cập nhật docs/RUNBOOK.md theo mẫu https://darkend16987.github.io/inno-ai-coding-guide/starter/docs/RUNBOOK.md: tìm trong repo cách cài, khởi động, dấu hiệu sẵn sàng, dữ liệu thử, lấy log, dọn dẹp — rồi CHẠY THẬT từng bước. Chỉ ghi điều đã thấy chạy (kèm ngày); giá trị nào là cố định / mặc định / cấu hình / quan sát được thì ghi rõ; điều chưa xác minh để ở mục CHƯA BIẾT. Không dùng dữ liệu production, không in secret. Dừng đúng những tiến trình bạn đã mở.</p><button class="btn copy" data-copy-target="p7">Sao chép</button></div>
   <div class="prompt"><h4>8. Biến một luật thành hàng rào tự động</h4><p id="p8">Dùng skill careful-engineering, references/invariants.md. Luật: &lt;mô tả, ví dụ "UI không được gọi thẳng DB"&gt;. Căn cứ: &lt;quyết định / lỗi đã gặp / spec&gt;. Trước khi viết check: ghi ranh giới (phạm vi, ví dụ được phép, ví dụ bị cấm, ngoại lệ, thông báo khi đỏ) — chỗ nào có hai cách hiểu thì hỏi tôi. Gắn check vào lệnh test sẵn có, chứng minh hai chiều (ca hợp lệ xanh, đưa vi phạm vào thì đỏ đúng thông báo), ghi mục BI vào docs/REGRESSION-GUARD.md, và báo riêng từng mức bảo vệ: chạy tay / hook / CI / chặn merge. Không tự sửa CI hay branch protection.</p><button class="btn copy" data-copy-target="p8">Sao chép</button></div>
+  <div class="prompt"><h4>9. Đưa một thư mục dự án chưa có git vào git</h4><p id="p9">Thư mục này chưa là git repo. Chỉ làm các việc sau, chưa sửa code: (1) liệt kê file có thể là secret (.env, token, client_secret, *.pem, file mật khẩu), file build output, file lớn &gt; 50 MB, file dữ liệu khách hàng; (2) đề xuất .gitignore theo công nghệ của dự án; (3) sau khi tôi duyệt: git init, thêm .gitignore, commit nguyên trạng với message "chore: dua du an vao git (nguyen trang)", rồi chạy git status và liệt kê những gì đã bị bỏ qua. Không push.</p><button class="btn copy" data-copy-target="p9">Sao chép</button></div>
+  <div class="prompt"><h4>10. INNO · plugin AutoCAD mới</h4><p id="p10">Dùng skill careful-engineering và inno-aec. Khởi tạo plugin AutoCAD &lt;tên&gt; cho AutoCAD &lt;năm&gt;: &lt;lệnh làm gì&gt;. Trước khi viết: xác nhận target .NET theo năm, nơi lấy DLL của AutoCAD trên máy này, và hỏi tôi nếu cần hỗ trợ nhiều năm. Dựng khung theo inno-aec (Core tách khỏi phần gọi AutoCAD, unit test cho Core, test trong accoreconsole với profile cách ly, build.ps1 một lệnh, AGENTS.md có mục Host &amp; phiên bản). Lệnh đầu tiên chỉ cần chạy được từ đầu tới cuối trong accoreconsole và ghi log pass/fail. Phần cần giao diện thì viết kịch bản thử tay vào docs/RUNBOOK.md.</p><button class="btn copy" data-copy-target="p10">Sao chép</button></div>
+  <div class="prompt"><h4>11. INNO · sửa / mở rộng tool tính diện tích – khối lượng</h4><p id="p11">Dùng skill careful-engineering và inno-aec (references/calc-quantities.md). Việc này là mức L. Yêu cầu: &lt;mô tả&gt;. Trước khi sửa: (1) nêu định nghĩa diện tích / quy tắc tính đang dùng và căn cứ của nó — không có căn cứ thì hỏi tôi chỗ tìm; (2) nếu chưa có golden test thì chụp kết quả hiện tại trên các bản vẽ mẫu thành golden; (3) viết kế hoạch, chờ tôi duyệt. Khi xong: bảng chênh lệch từng ca giữa mã cũ và mã mới, giải thích mọi chênh lệch, đối chiếu với lệnh AREA của AutoCAD, nêu rõ quy tắc làm tròn và danh sách đối tượng bị loại.</p><button class="btn copy" data-copy-target="p11">Sao chép</button></div>
+  <div class="prompt"><h4>12. INNO · add-in Revit</h4><p id="p12">Dùng skill careful-engineering và inno-aec (references/revit.md). Add-in Revit &lt;năm&gt;: &lt;mô tả&gt;. Đưa tối đa logic vào thư viện Core không tham chiếu RevitAPI và unit test nó; phần gọi Revit API mỏng nhất có thể, mọi thay đổi trong Transaction có tên, cửa sổ không modal thì dùng ExternalEvent, chuyển đơn vị feet ở biên. Máy này không chạy được Revit tự động ⇒ viết kịch bản thử tay (file .rvt mẫu, bước bấm, kết quả đo được) và báo cáo tách rõ phần đã test / chưa test. Điều nào về Revit API bạn chưa kiểm được trên đúng năm thì nói là chưa kiểm.</p><button class="btn copy" data-copy-target="p12">Sao chép</button></div>
 </section>
 
 <section class="section" id="newproject">
@@ -199,6 +364,7 @@ Bắt buộc: (1) tái hiện lỗi có chủ đích và ghi số đo trước k
     <label class="check"><input type="checkbox"><span><strong>Tạo repo Private</strong> bằng GitHub Desktop (<code>File → New Repository</code> → <code>Publish</code>, tích <em>Keep this code private</em>). Xem <a href="guides/github-desktop-claude-code-codex.html#part4">Phần 4 của hướng dẫn</a>.</span></label>
     <label class="check"><input type="checkbox"><span><strong>Chép bộ starter</strong> vào gốc repo: <a href="starter/.gitignore"><code>.gitignore</code></a>, <a href="starter/AGENTS.md"><code>AGENTS.md</code></a> (hướng dẫn chung — điền tên dự án, bản đồ, lệnh test), <a href="starter/CLAUDE.md"><code>CLAUDE.md</code></a> (chỉ nhập <code>AGENTS.md</code>), <a href="starter/docs/RUNBOOK.md"><code>docs/RUNBOOK.md</code></a> (cách chạy &amp; quan sát app), <a href="starter/docs/plans/README.md"><code>docs/plans/</code></a> (kế hoạch việc lớn).</span></label>
     <label class="check"><input type="checkbox"><span><strong>Cài skill</strong> cho máy hoặc cho repo (<a href="#install">mục Cài skill</a>).</span></label>
+    <label class="check"><input type="checkbox"><span><strong>Xác định loại dự án</strong> (<a href="#types">mục Loại dự án</a>) và ghi vào <code>AGENTS.md</code> cách kiểm chứng tương ứng. Plugin AutoCAD / Revit: thêm mục <em>Host &amp; phiên bản</em> theo <a href="#inno">inno-aec</a>.</span></label>
     <label class="check"><input type="checkbox"><span><strong>Commit đầu tiên</strong> chỉ gồm khung dự án + một test chạy được (prompt mẫu 6), rồi Push.</span></label>
     <label class="check"><input type="checkbox"><span><strong>Mỗi tính năng một branch</strong> (<code>feature/ten-tinh-nang</code>); giao việc bằng prompt mẫu 2; duyệt kế hoạch trước khi AI sửa.</span></label>
     <label class="check"><input type="checkbox"><span><strong>Review diff trong GitHub Desktop</strong> từng file AI sửa; chạy thử; chỉ commit những file đúng việc.</span></label>
@@ -218,6 +384,7 @@ Bắt buộc: (1) tái hiện lỗi có chủ đích và ghi số đo trước k
       <div class="grp">careful-engineering</div>
       <button data-file="careful-engineering/SKILL.md">SKILL.md — quy trình</button>
       <div class="grp">careful-engineering · references</div>
+      <button data-file="careful-engineering/references/project-types.md">Theo loại dự án</button>
       <button data-file="careful-engineering/references/measurement.md">Đo trước khi kết luận</button>
       <button data-file="careful-engineering/references/testing-net.md">Lưới test & đột biến</button>
       <button data-file="careful-engineering/references/invariants.md">Bất biến → hàng rào</button>
@@ -229,6 +396,12 @@ Bắt buộc: (1) tái hiện lỗi có chủ đích và ghi số đo trước k
       <div class="grp">careful-engineering · templates</div>
       <button data-file="careful-engineering/templates/patch.js">patch.js</button>
       <button data-file="careful-engineering/templates/mutate.js">mutate.js</button>
+      <div class="grp">inno-aec · INNO</div>
+      <button data-file="inno-aec/SKILL.md">SKILL.md — luật nhà</button>
+      <button data-file="inno-aec/references/autocad.md">AutoCAD · LISP</button>
+      <button data-file="inno-aec/references/revit.md">Revit add-in</button>
+      <button data-file="inno-aec/references/calc-quantities.md">Diện tích · khối lượng</button>
+      <button data-file="inno-aec/references/business-data.md">Dữ liệu dự án · hợp đồng</button>
       <div class="grp">caveman</div>
       <button data-file="caveman/SKILL.md">caveman — SKILL.md</button>
       <button data-file="caveman/README.md">caveman — giới thiệu</button>
@@ -241,6 +414,8 @@ Bắt buộc: (1) tái hiện lỗi có chủ đích và ghi số đo trước k
 <section class="section" id="faq">
   <h2>Hỏi đáp</h2>
   <details><summary>Skill có làm AI chậm hơn không?</summary><div>Có, với việc lớn — AI sẽ đọc kỹ, lập kế hoạch và kiểm chứng trước khi báo xong. Đổi lại là ít phải làm lại, ít lỗi lọt lên bản chính. Với việc vặt, skill cho phép rút gọn.</div></details>
+  <details><summary>Vì sao tách careful-engineering và inno-aec?</summary><div>careful-engineering là <em>cách làm</em> — đúng cho mọi dự án, kể cả dự án cá nhân không liên quan tới công ty. inno-aec là <em>kiến thức lĩnh vực</em> — AutoCAD, Revit, diện tích, hợp đồng — chỉ nạp khi việc chạm tới lĩnh vực đó. Tách ra thì mỗi skill ngắn hơn, AI chỉ đọc cái cần, và cập nhật luật công ty không đụng quy trình chung. Điều chỉ đúng cho một repo thì không thuộc skill nào — viết vào <code>AGENTS.md</code> của repo đó.</div></details>
+  <details><summary>Dự án của tôi chưa có test nào — AI làm sao "test trước và sau"?</summary><div>Skill dặn AI không tự dựng framework lớn khi không được giao, mà <strong>chụp hành vi hiện tại</strong> của đúng vùng sắp sửa thành golden test (đầu vào cố định → so với đầu ra đã lưu), chạy bằng một lệnh, ghi lệnh vào <code>AGENTS.md</code>. Việc mức L mà không kiểm tự động được thì AI đề xuất dựng lưới test thành một đợt riêng, làm trước.</div></details>
   <details><summary>Tôi đã có skill karpathy-guidelines, có xung đột không?</summary><div>Không. careful-engineering kế thừa nguyên 4 nguyên tắc đó và thêm quy trình + bài học thực tế. Có thể giữ cả hai.</div></details>
   <details><summary>AI vẫn hỏi lại tôi nhiều không?</summary><div>Skill dặn AI chỉ hỏi khi yêu cầu có từ hai cách hiểu dẫn tới kết quả khác nhau mà code không trả lời được, hoặc trước thao tác khó lùi (push, deploy, xoá). Còn lại AI nêu giả định một dòng rồi làm.</div></details>
   <details><summary>Commit message nên có dấu tiếng Việt không?</summary><div>Theo quy ước của từng repo (ghi trong AGENTS.md / CLAUDE.md). Có repo cấm dấu vì PowerShell làm vỡ mã hoá. Dù chọn cách nào: ghi message ra file rồi <code>git commit -F</code>, sau đó xem lại <code>git log -1</code> — thấy <code>â€</code> hoặc <code>Ã</code> là vỡ, sửa trước khi push.</div></details>
@@ -249,7 +424,7 @@ Bắt buộc: (1) tái hiện lỗi có chủ đích và ghi số đo trước k
   <details><summary>Muốn góp thêm bài học / bẫy mới?</summary><div>Mở Pull Request vào repo, sửa file trong <code>skills/careful-engineering/references/</code>. Ghi bài học dưới dạng: chuyện gì đã xảy ra (đã đo), luật rút ra, cách áp dụng. Không đưa số liệu / tên khách hàng / dữ liệu nội bộ vào.</div></details>
 </section>
 
-<footer class="foot">AI Coding Guide • skill careful-engineering &amp; caveman • 10/2026<br><small>Lệnh cài và giao diện công cụ có thể thay đổi theo phiên bản; ưu tiên tài liệu chính thức của GitHub, Anthropic, OpenAI.</small></footer>
+<footer class="foot">AI Coding Guide • skill careful-engineering, inno-aec &amp; caveman • 10/2026<br><small>Lệnh cài và giao diện công cụ có thể thay đổi theo phiên bản; ưu tiên tài liệu chính thức của GitHub, Anthropic, OpenAI.</small></footer>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
@@ -330,6 +505,10 @@ Bắt buộc: (1) tái hiện lỗi có chủ đích và ghi số đo trước k
     }
   }
   buttons.forEach(function (b) { b.addEventListener("click", function () { show(b.dataset.file, true); }); });
+  // links elsewhere on the page that open a skill file in the viewer
+  document.querySelectorAll("a.jump").forEach(function (a) {
+    a.addEventListener("click", function (e) { e.preventDefault(); show(a.dataset.file, true); document.getElementById("skill").scrollIntoView(); });
+  });
   function known(f) { return buttons.some(function (b) { return b.dataset.file === f; }); }
   var m = location.hash.match(/^#skill=(.+)$/), want = m && m[1];
   // Old links (#skill=SKILL.md) predate the multi-skill layout and point into careful-engineering.
