@@ -10,7 +10,9 @@ tiếng Việt KHÔNG dấu> (chọn một, ghi rõ).
 
 ## Quy trình làm việc
 
-Dùng skill **careful-engineering** (pha 0 → 7: đọc, hiểu, kế hoạch, làm, kiểm chứng, ghi sổ, commit, deploy).
+Dùng skill **careful-engineering** (chọn mức S/M/L theo rủi ro; pha 0 → 7: đọc, hiểu, kế hoạch, làm,
+kiểm chứng, ghi sổ, commit, deploy). <Repo của INNO / plugin CAD-BIM / tool tính toán / dữ liệu hợp đồng:
+dùng thêm skill **inno-aec**, và thêm mục "Host & phiên bản" theo mẫu trong skill đó. Không phải thì xoá câu này.>
 - Claude Code: skill đã cài ở `~/.claude/skills/` hoặc `.claude/skills/` của repo.
 - Codex / agent khác: đọc `skills/careful-engineering/SKILL.md` (chép thư mục đó từ
   https://github.com/darkend16987/inno-ai-coding-guide vào repo), mở file trong `references/` khi pha
