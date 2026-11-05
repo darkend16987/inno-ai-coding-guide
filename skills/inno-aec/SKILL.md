@@ -39,6 +39,7 @@ kết luận) là của **careful-engineering** — dùng cả hai. Thứ tự �
 | Diện tích, GFA, khối lượng, làm tròn, đơn vị bản vẽ, golden test | [references/calc-quantities.md](references/calc-quantities.md) |
 | CSDL dự án / hợp đồng / nhân sự, tiền & VAT, web app nội bộ, nguồn Excel / 1Office | [references/business-data.md](references/business-data.md) |
 | Đọc DWG/DXF không cần AutoCAD (thư viện, license) | [references/autocad.md](references/autocad.md) §6 |
+| Dự án mới chưa có đặc tả, người yêu cầu không chuyên (plugin CAD/BIM, tool tính toán, CSDL) | skill **project-scope** — gói câu hỏi "Plugin cho phần mềm chủ", "Tool tính toán", "CSDL dự án – hợp đồng" |
 
 Loại dự án khác (web, bot, scraper, LLM, ML…): careful-engineering `references/project-types.md`.
 

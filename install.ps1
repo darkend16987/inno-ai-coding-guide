@@ -1,5 +1,5 @@
-# Install the team's Claude Code skills: careful-engineering (any project), inno-aec (INNO / CAD-BIM
-# rules) + caveman (caveman, ultracave, megacave).
+# Install the team's Claude Code skills: careful-engineering (any project), project-scope (project
+# kickoff survey + living SCOPE.md), inno-aec (INNO / CAD-BIM rules) + caveman (caveman, ultracave, megacave).
 # ASCII only on purpose: Windows PowerShell 5.1 reads a BOM-less script as ANSI, and any
 # non-ASCII character would break it.
 #
@@ -18,7 +18,7 @@ param(
   [string]$Dest = "",
   [switch]$Project,
   [switch]$GlobalMemory,
-  [string[]]$Skill = @("careful-engineering", "inno-aec", "caveman", "ultracave", "megacave"),
+  [string[]]$Skill = @("careful-engineering", "project-scope", "inno-aec", "caveman", "ultracave", "megacave"),
   [string]$Repo = "darkend16987/inno-ai-coding-guide",
   [string]$Branch = "main"
 )
@@ -74,7 +74,7 @@ try {
     }
     if (-not (Test-Path $mem)) { throw "install failed: $mem missing" }
   }
-  Write-Host "Open a NEW Claude Code session, then type /careful-engineering, /inno-aec or /caveman, or ask: 'Which skills are available?'"
+  Write-Host "Open a NEW Claude Code session, then type /careful-engineering, /project-scope, /inno-aec or /caveman, or ask: 'Which skills are available?'"
 }
 finally {
   Remove-Item -Recurse -Force -Path $tmp -ErrorAction SilentlyContinue

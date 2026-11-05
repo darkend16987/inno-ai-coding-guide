@@ -13,6 +13,7 @@ repo trước khi tạo file mới. Repo đã đặt tên khác (ví dụ `docs/
 | Bất biến / luật chống hồi quy + ma trận test | `docs/REGRESSION-GUARD.md` |
 | Cách chạy app, biết app đã sẵn sàng, lấy log, dọn dẹp | `docs/RUNBOOK.md` |
 | Thiết kế + kế hoạch của một việc lớn | `docs/plans/active/` → xong thì chuyển sang `docs/plans/completed/` |
+| Phạm vi: làm gì / không làm gì, yêu cầu có ID (`R-`), ví dụ nghiệm thu (`E-`), giả định, câu hỏi mở, nhật ký đổi (`CR-`) | `docs/SCOPE.md` (skill `project-scope`; kiểm bằng `scope-check.js`) |
 | Bẫy mới gặp (môi trường, công cụ) | `AGENTS.md` mục "Điều dễ vướng" + memory |
 
 Code, test và lịch sử git là nguồn sự thật về **cái đang chạy**. Sổ ghi chỉ giữ cái code không nói
@@ -39,6 +40,10 @@ Ngày · Trạng thái: CHỜ DUYỆT | ĐÃ DUYỆT <ngày, ai>
 ## Lựa chọn tôi tự quyết (đảo được) · Câu hỏi còn mở
 ```
 Đã duyệt ⇒ lập memo kế hoạch §1, trỏ về file này (kế hoạch lập luận từ thiết kế; người làm đọc cả hai).
+
+Dự án đã có `docs/SCOPE.md` được duyệt (skill `project-scope`): các mục *Mục tiêu · Thành công · Không làm ·
+Thất bại dù đúng kỹ thuật · Ràng buộc* đã nằm trong SCOPE (`G-` · `E-` · `NG-` · `RR-` · `C-`) — bản thiết kế
+**trỏ về ID**, chỉ viết *Hướng đã chọn + các hướng đã loại* và *Lựa chọn tôi tự quyết · Câu hỏi còn mở*.
 
 *§0, cột "dùng / cung cấp" và §6b phỏng theo skill brainstorming và writing-plans của
 [obra/superpowers](https://github.com/obra/superpowers) (MIT).*

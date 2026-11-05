@@ -9,6 +9,7 @@ Bộ tài liệu cho thành viên team khi làm phần mềm / tool mới với 
 | [`index.html`](index.html) | Trang chủ (GitHub Pages): bắt đầu từ đâu, cài skill, quy trình 8 pha, prompt mẫu, checklist dự án mới, đọc skill |
 | [`guides/github-desktop-claude-code-codex.html`](guides/github-desktop-claude-code-codex.html) | Hướng dẫn A–Z: GitHub, GitHub Desktop, VS Code, Claude Code, Codex |
 | [`skills/careful-engineering/`](skills/careful-engineering/) | Skill quy trình cho **mọi loại dự án**: chọn mức S/M/L theo rủi ro, 8 pha chống hallucination & regression, cách kiểm chứng theo loại dự án |
+| [`skills/project-scope/`](skills/project-scope/) | Skill **khởi tạo dự án từ con số 0**: khảo sát có cấu trúc (kể cả người không chuyên) → `docs/SCOPE.md` sống — yêu cầu có ID, trạng thái, tiêu chí nghiệm thu, giả định, câu hỏi mở, nhật ký đổi; kèm `scope-check.js` để kiểm |
 | [`skills/inno-aec/`](skills/inno-aec/) | Skill **riêng INNO**: luật nhà, plugin AutoCAD (.NET, LISP, accoreconsole), add-in Revit, tool tính diện tích / khối lượng, dữ liệu dự án – hợp đồng |
 | [`skills/caveman/`](skills/caveman/), [`ultracave/`](skills/ultracave/), [`megacave/`](skills/megacave/) | Skill giọng trả lời gọn (bật bằng `/caveman`), chép nguyên văn từ [juliusbrussee/caveman](https://github.com/juliusbrussee/caveman), Apache-2.0 |
 | [`starter/`](starter/) | Mẫu `AGENTS.md`, `CLAUDE.md`, `docs/RUNBOOK.md`, `docs/plans/`, `.gitignore` cho repo mới |
@@ -21,7 +22,7 @@ Bộ tài liệu cho thành viên team khi làm phần mềm / tool mới với 
 irm https://darkend16987.github.io/inno-ai-coding-guide/install.ps1 | iex
 ```
 
-Cài cả năm skill vào `%USERPROFILE%\.claude\skills\<tên skill>` (bản cũ được sao lưu `.bak-<ngày giờ>`).
+Cài cả sáu skill vào `%USERPROFILE%\.claude\skills\<tên skill>` (bản cũ được sao lưu `.bak-<ngày giờ>`).
 Chỉ cài một vài skill: thêm `-Skill careful-engineering,caveman`. Thêm `-GlobalMemory` để chép mẫu hướng
 dẫn cá nhân [`starter/global/CLAUDE.md`](starter/global/CLAUDE.md) vào `%USERPROFILE%\.claude\CLAUDE.md`
 (chỉ khi file đó chưa có; đã có thì lưu mẫu cạnh nó thành `CLAUDE.inno-guide.md`). Cài cho riêng một repo: chạy tại gốc repo
@@ -30,7 +31,7 @@ dẫn cá nhân [`starter/global/CLAUDE.md`](starter/global/CLAUDE.md) vào `%US
 & ([scriptblock]::Create((irm https://darkend16987.github.io/inno-ai-coding-guide/install.ps1))) -Project
 ```
 
-Kiểm tra: mở phiên Claude Code mới, gõ `/careful-engineering` hoặc `/caveman`.
+Kiểm tra: mở phiên Claude Code mới, gõ `/careful-engineering`, `/project-scope` hoặc `/caveman`.
 
 ## Skill careful-engineering gồm gì
 
@@ -58,9 +59,27 @@ Phần viết lại (không chép nguyên văn) từ các dự án khác, có gh
 Không cài các dự án trên song song với `careful-engineering`; taste-skill là skill ngoài tuỳ chọn cho trang
 web công khai — xem mục "Skill ngoài" trên trang.
 
+## Skill project-scope gồm gì
+
+`careful-engineering` lo **làm thế nào cho đúng**; `project-scope` lo **làm cái gì** — đi trước nó với dự án mới
+hoặc việc mức L còn mơ hồ, nhất là khi người yêu cầu không chuyên kỹ thuật.
+
+- `SKILL.md` — ba chế độ: **A** khởi tạo (khảo sát theo vòng ≤ 5 câu, bản tóm tắt bằng lời thường để duyệt, ghi
+  `docs/SCOPE.md`) · **B** dựng SCOPE từ repo có sẵn · **C** đổi phạm vi giữa chừng. Bốn luật: người dùng nói
+  nghiệp vụ, AI quyết kỹ thuật · đọc trước khi hỏi · mọi dòng có nguồn · không đoán nghiệp vụ.
+- `references/` — ngân hàng 12 khối câu hỏi · gói câu hỏi theo 15 loại dự án (CAD/BIM, tính toán, CSDL, web,
+  bot, LLM…) · quy trình đổi phạm vi (LÀM RÕ / ĐỔI NHỎ / ĐỔI HƯỚNG) · dựng SCOPE từ repo cũ.
+- `templates/` — `SCOPE.md` (file sống, ID bền) · `scope-summary.md` (bản duyệt bằng lời thường) ·
+  `scope-check.js` (kiểm cấu trúc, câu hỏi mở đang chặn, số đo quá hạn; in tiến độ; cần Node 18+).
+
+Chạy thử bộ kiểm: `node evals/scope-check.test.js` (37 ca; đã đột biến 16/16). Đã chạy thử hai tình huống
+với agent (có / không skill, số lần còn ít, người chấm không mù) — xem [`evals/RESULTS.md`](evals/RESULTS.md).
+Ý "làm rõ trước khi xây" chung gốc với [obra/superpowers](https://github.com/obra/superpowers) (MIT, đã ghi ở bảng
+trên); bảng giả định "nếu sai thì…", câu hỏi mở có người trả lời và mã tham chiếu rút từ cách làm của chính team.
+
 ## Đo chất lượng skill
 
-[`evals/`](evals/) chứa tình huống thử cho `careful-engineering` và `inno-aec`, cách chạy (có skill / không
+[`evals/`](evals/) chứa tình huống thử cho `careful-engineering`, `project-scope` và `inno-aec`, cách chạy (có skill / không
 skill, chấm theo danh sách "phải có / không được") và [`RESULTS.md`](evals/RESULTS.md). Sửa luật của skill ⇒
 kèm số đo trước / sau. Thư mục này không được lệnh cài chép về máy.
 
@@ -79,7 +98,7 @@ kèm số đo trước / sau. Thư mục này không được lệnh cài chép 
 
 | Lớp | Ở đâu | Chứa gì |
 |---|---|---|
-| 1 · Cá nhân | `~/.claude/CLAUDE.md` + skill `careful-engineering`, `caveman` | Sở thích chung, quy trình đúng cho mọi dự án |
+| 1 · Cá nhân | `~/.claude/CLAUDE.md` + skill `careful-engineering`, `project-scope`, `caveman` | Sở thích chung, quy trình đúng cho mọi dự án |
 | 2 · Công ty | skill `inno-aec` | Luật INNO, kiến thức CAD/BIM, tính toán, dữ liệu hợp đồng |
 | 3 · Repo | `AGENTS.md` (+ `CLAUDE.md` chỉ `@AGENTS.md`), `docs/` | Bản đồ repo, lệnh test, host & phiên bản, luật không được phá |
 

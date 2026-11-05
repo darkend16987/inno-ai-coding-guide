@@ -11,6 +11,8 @@
 ## Cách làm việc
 - Việc sửa code / dữ liệu / hạ tầng: dùng skill **careful-engineering** — chọn mức S/M/L theo rủi ro, nói
   mức một dòng rồi làm đúng các pha của mức đó.
+- Bắt đầu dự án mới từ ý tưởng, hoặc yêu cầu còn mơ hồ / người yêu cầu không chuyên: dùng skill
+  **project-scope** để khảo sát và ghi `docs/SCOPE.md` trước khi làm.
 - Repo của INNO, hoặc việc chạm AutoCAD / Revit / LISP / bản vẽ / diện tích / khối lượng / hợp đồng / tiền
   VND: dùng thêm skill **inno-aec**.
 - Được giao "xem / kiểm tra / review / giải thích" ⇒ chỉ đọc và báo cáo, chưa sửa.

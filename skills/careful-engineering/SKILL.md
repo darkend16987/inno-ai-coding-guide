@@ -73,6 +73,9 @@ những pha mức đó yêu cầu.
   (kèm `.gitignore` chặn `.env`, build output) — không có git thì không có đường lùi cho bất kỳ sửa nào.
 - Repo có skill miền (ví dụ `inno-aec` cho plugin CAD/BIM, tool tính toán, dữ liệu hợp đồng) ⇒ đọc
   luôn skill đó; luật của miền đứng trên mặc định chung ở đây.
+- Repo có `docs/SCOPE.md` (skill **project-scope**) ⇒ chạy `node scripts/scope-check.js docs/SCOPE.md`, đọc các
+  dòng `R-` / `Q-` / `B-` liên quan (tìm theo ID) và nói việc này phục vụ `R-` nào. **Không truy được về
+  `R-` nào ⇒ đó là thay đổi phạm vi**: dừng, đi chế độ C của `project-scope` (`references/change-control.md`).
 - Xác định **phạm vi ảnh hưởng**: grep tên hàm/trường sẽ đổi trong **toàn repo** (không chỉ file
   đang mở) — mọi nơi đọc, mọi nơi ghi, mọi bản sao (UI, bake/export, serialize, test, docs).
 - Xác định **năng lực**: chạy được test không, khởi động được app không (`docs/RUNBOOK.md`), đọc được
@@ -92,6 +95,10 @@ những pha mức đó yêu cầu.
   dùng **chọn** trước khi lập kế hoạch. Lựa chọn mình tự quyết thì ghi là của mình, không ghi "đã thống nhất".
 - Dự án mới / tính năng mức L ⇒ **bản thiết kế ngắn** được duyệt trước kế hoạch
   ([references/memo-handoff.md](references/memo-handoff.md) §0).
+- Người yêu cầu **không chuyên**, hoặc **chưa có gì ngoài ý tưởng** ⇒ dùng skill **project-scope** trước:
+  khảo sát có cấu trúc (hỏi theo vòng ≤ 5 câu — đây là ngoại lệ có chủ đích của luật "một câu mỗi lượt", vốn
+  dành cho việc đang làm giữa chừng) rồi `docs/SCOPE.md` đã duyệt. SCOPE trả lời *làm cái gì*; bản thiết kế ngắn
+  còn lại phần *làm thế nào* và trỏ về ID trong SCOPE, không chép lại.
 - Với lỗi: **tái hiện** trên hệ thống thật, ghi số đo "trước khi sửa" ([references/debugging.md](references/debugging.md) bước 1).
 - → verify: có tiêu chí đo được + "không làm"; hướng đã chọn (M/L); số đo tái hiện (với lỗi).
 
@@ -137,6 +144,8 @@ những pha mức đó yêu cầu.
 - Memo kế hoạch: cập nhật trạng thái đợt; xong việc ⇒ điền "Kết quả", chuyển quyết định / luật sống
   lâu ra sổ chính, `git mv` sang `docs/plans/completed/`.
 - Cập nhật tài liệu người dùng / help / i18n nếu hành vi người dùng thấy thay đổi.
+- `docs/SCOPE.md` (nếu có): trạng thái `R-` (**XONG** chỉ khi ô *Nghiệm thu* đã chạy xanh, kèm commit), đóng `Q-` đã
+  có trả lời, ghi `CR-` cho thay đổi phạm vi, đo lại số liệu quá hạn; chạy lại `scope-check`.
 - Memory (nếu có hệ thống memory): chỉ điều **không suy ra được từ repo** (quyết định của chủ dự án,
   bẫy môi trường đã đo, trạng thái push/phát hành). Cập nhật bản ghi cũ, không tạo bản trùng.
 - Handoff: việc đã xong / đang dở / còn mở / bước kế tiếp. → [references/memo-handoff.md](references/memo-handoff.md)
@@ -159,7 +168,8 @@ những pha mức đó yêu cầu.
 - → [references/commit-deploy.md](references/commit-deploy.md)
 
 ### Trường hợp đặc biệt
-- **Dự án mới (chưa có code).** Pha 0 thành: mục tiêu, ai dùng, ràng buộc môi trường (phiên bản host
+- **Dự án mới (chưa có code).** Người yêu cầu không chuyên ⇒ để skill **project-scope** khảo sát (ra
+  `docs/SCOPE.md`) thay vì tự hỏi lẻ từng câu. Pha 0 thành: mục tiêu, ai dùng, ràng buộc môi trường (phiên bản host
   như Revit / AutoCAD / Node / Python, máy chạy, nơi deploy), dữ liệu thật trông thế nào — hỏi nếu
   thiếu. Chọn công nghệ theo ràng buộc, nêu đánh đổi, ghi vào bản thiết kế ngắn (memo-handoff §0) chờ
   duyệt. Việc đầu tiên là **khung chạy được từ đầu tới cuối** + một test + `AGENTS.md` +
@@ -197,3 +207,6 @@ phần **chưa** kiểm, việc ngoài phạm vi phát hiện được, rồi **
 | [references/data-migration.md](references/data-migration.md) | dữ liệu nghiệp vụ, ETL Excel/CSV, schema, migration, CSDL production |
 | [templates/patch.js](templates/patch.js) | sửa nhiều chỗ / chuỗi có `\` backtick tiếng Việt |
 | [templates/mutate.js](templates/mutate.js) | chứng minh test mới bắt được lỗi |
+
+Khảo sát phạm vi và file `docs/SCOPE.md` (dự án mới, việc mức L còn mơ hồ, người yêu cầu không chuyên, phạm vi
+đổi giữa chừng) nằm ở skill **project-scope** — đi trước skill này với dự án mới.

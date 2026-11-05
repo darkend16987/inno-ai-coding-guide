@@ -25,6 +25,8 @@ Tối thiểu bắt buộc, kể cả khi không có skill:
 - Chạy toàn bộ test trước và sau thay đổi; test mới phải đỏ được; thay đổi giao diện / tích hợp thì
   chạy thử app thật theo `docs/RUNBOOK.md`.
 - Mỗi việc một commit; message viết ra file rồi `git commit -F`; kiểm lại tiếng Việt sau khi commit.
+- <Repo có `docs/SCOPE.md` (tạo bằng skill **project-scope**): việc không truy được về một yêu cầu `R-` là thay đổi
+  phạm vi — hỏi trước, ghi `CR-`, đừng làm trong im lặng. Repo chưa có SCOPE: xoá dòng này.>
 - Không push / deploy / xoá dữ liệu / đổi CI khi chưa được yêu cầu. Không commit secret / `.env` / build output.
 - Cuối phiên: cập nhật `docs/HANDOFF.md` (đã làm, số đo, chưa kiểm + vì sao, bước kế tiếp).
 
@@ -54,6 +56,7 @@ Chạy app, biết app đã sẵn sàng, dữ liệu thử, lấy log, dọn d�
 | Quyết định kiến trúc + đường thoát nếu sai | `docs/DECISIONS.md` |
 | Bất biến chống hồi quy + ma trận "đụng gì → test gì" | `docs/REGRESSION-GUARD.md` |
 | Cách chạy & quan sát app | `docs/RUNBOOK.md` |
+| <Phạm vi: yêu cầu `R-`, không làm `NG-`, ví dụ nghiệm thu `E-`, giả định, câu hỏi mở, nhật ký đổi> | <`docs/SCOPE.md` — kiểm: `node scripts/scope-check.js docs/SCOPE.md`; không dùng thì xoá dòng này> |
 
 Code, test và git là nguồn sự thật về cái đang chạy; sổ ghi chỉ giữ ý định, lý do, quyết định, trạng thái.
 

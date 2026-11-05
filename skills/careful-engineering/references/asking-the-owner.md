@@ -39,6 +39,9 @@ cáo, chưa được sửa file hay chạy lệnh đổi trạng thái. Thấy c
 - Viết rõ **lệnh nào chạy ở máy nào** (máy dev / server / production), đừng gộp lệnh kiểm và lệnh sửa.
 - Đặt tên như người trong ngành nói, không như lập trình viên (chọn "Làm dự toán", không phải
   "Dự toán (đầu việc)").
+- **Ngoại lệ có chủ đích:** lúc *khởi tạo* với người không chuyên, skill `project-scope` hỏi theo vòng tối đa 5
+  câu (mỗi câu có "vì sao hỏi", ví dụ trả lời, lựa chọn "chưa biết"), không phải một câu mỗi lượt. Một câu mỗi
+  lượt là cho việc đang làm giữa chừng, khi chỉ còn một chỗ mơ hồ.
 
 ## 4. Dữ liệu nghi vấn: để TRỐNG, đừng đoán
 

@@ -9,6 +9,8 @@ Thư mục `evals/` không nằm trong `skills/`, nên lệnh cài không chép 
 | File | Skill |
 |---|---|
 | [careful-engineering.md](careful-engineering.md) | quy trình chung |
+| [project-scope.md](project-scope.md) | khảo sát, SCOPE, đổi phạm vi (người không chuyên) |
+| [scope-check.test.js](scope-check.test.js) | bộ kiểm của `scope-check.js` — `node evals/scope-check.test.js`, không cần agent |
 | [inno-aec.md](inno-aec.md) | luật INNO, CAD/BIM, tính toán, dữ liệu |
 | [RESULTS.md](RESULTS.md) | kết quả các lần chạy |
 
