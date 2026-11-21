@@ -186,7 +186,7 @@ details>div{padding:0 2px 14px;color:#45566d}
 
 <section class="section" id="install">
   <h2>Cài bộ skill</h2>
-  <p>Bộ skill gồm <code>careful-engineering</code> (quy trình, mọi dự án), <code>project-scope</code> (khảo sát để ra phạm vi dự án — <a href="#scope">xem mục Khởi tạo</a>), <code>inno-aec</code> (luật INNO, CAD/BIM, tính toán, dữ liệu hợp đồng) và nhóm caveman: <code>caveman</code>, <code>ultracave</code>, <code>megacave</code> (giọng trả lời gọn — <a href="#caveman">xem mục Caveman</a>). Lệnh cài mặc định chép cả sáu. <code>inno-aec</code> chỉ được nạp khi việc thuộc lĩnh vực của nó, nên cài cho máy cũng không làm phiền các dự án khác.</p>
+  <p>Bộ skill gồm <code>careful-engineering</code> (quy trình, mọi dự án), <code>project-scope</code> (khảo sát để ra phạm vi dự án — <a href="#scope">xem mục Khởi tạo</a>), <code>inno-aec</code> (luật INNO, CAD/BIM, tính toán, dữ liệu hợp đồng) và nhóm caveman: <code>caveman</code>, <code>ultracave</code>, <code>megacave</code> (giọng trả lời gọn — <a href="#caveman">xem mục Caveman</a>). Lệnh cài mặc định chép cả sáu <strong>và đăng ký một hook nhắc skill</strong> (xem ngay dưới các tab), để mọi phiên ở mọi dự án tự được nhắc dùng đúng skill. <code>inno-aec</code> chỉ được nhắc khi việc thuộc lĩnh vực của nó, nên cài cho máy cũng không làm phiền các dự án khác.</p>
   <div class="tabs" role="tablist" aria-label="Cách cài">
     <button role="tab" aria-selected="true" data-tab="user">Claude Code — cho cả máy (khuyến nghị)</button>
     <button role="tab" aria-selected="false" data-tab="project">Claude Code — cho một repo</button>
@@ -206,7 +206,7 @@ details>div{padding:0 2px 14px;color:#45566d}
   <div class="tabpanel" data-panel="project" hidden>
     <p>Dùng khi muốn skill <strong>đi theo repo</strong> (ai clone repo cũng có). Mở PowerShell <strong>tại thư mục gốc của repo</strong> rồi chạy:</p>
     <div class="copyline"><button class="btn copy" data-copy-target="inst-proj">Sao chép</button><pre><code id="inst-proj">&amp; ([scriptblock]::Create((irm https://darkend16987.github.io/inno-ai-coding-guide/install.ps1))) -Project</code></pre></div>
-    <p>Skill vào <code>.claude\skills\&lt;tên skill&gt;</code> của repo. Commit thư mục đó bằng GitHub Desktop như mọi file khác. Có thể ghép <code>-Project -Skill careful-engineering,project-scope,inno-aec</code> để chỉ đưa skill quy trình (và luật INNO, với repo của công ty) vào repo — caveman là sở thích cá nhân, nên cài cho máy.</p>
+    <p>Skill vào <code>.claude\skills\&lt;tên skill&gt;</code> của repo. Commit thư mục đó bằng GitHub Desktop như mọi file khác. Có thể ghép <code>-Project -Skill careful-engineering,project-scope,inno-aec</code> để chỉ đưa skill quy trình (và luật INNO, với repo của công ty) vào repo — caveman là sở thích cá nhân, nên cài cho máy. Hook nhắc skill cũng đi vào <code>.claude\hooks</code> và <code>.claude\settings.json</code> của repo; đã cài cho cả máy thì thêm <code>-NoHook</code> để khỏi nhắc hai lần.</p>
   </div>
   <div class="tabpanel" data-panel="codex" hidden>
     <p>Codex và nhiều agent khác đọc file <code>AGENTS.md</code> ở gốc repo. Cách chắc chắn chạy được với mọi phiên bản:</p>
@@ -223,7 +223,18 @@ details>div{padding:0 2px 14px;color:#45566d}
       <li>Kết quả phải là <code>%USERPROFILE%\.claude\skills\careful-engineering\SKILL.md</code>, <code>…\caveman\SKILL.md</code>, v.v.</li>
     </ol>
   </div>
-  <div class="warning">Chỉ chạy lệnh <code>irm … | iex</code> khi bạn tin nguồn của nó. Muốn xem trước script làm gì: mở <a href="install.ps1">install.ps1</a> — nó chỉ tải ZIP của repo này từ GitHub, sao lưu bản cũ, chép thư mục skill, rồi kiểm tra <code>SKILL.md</code> có mặt. Nó <strong>không</strong> cài hook, plugin hay chương trình nào của dự án caveman gốc.</div>
+  <h3>Hook nhắc skill — để project nào cũng tự bắt skill</h3>
+  <p>Claude chỉ nạp skill khi tự thấy phần mô tả khớp, nên có phiên bỏ sót. Vì vậy lệnh cài còn đăng ký một hook <code>SessionStart</code> (<a href="hooks/inno-skill-router.js">hooks/inno-skill-router.js</a>): đầu mỗi phiên nó đưa cho Claude một khối ngắn — skill nào có sẵn, dùng khi nào — cộng vài sự thật về thư mục đang mở:</p>
+  <div class="table-wrap"><table>
+    <tr><th>Thấy gì ở thư mục</th><th>Hook nhắc</th></tr>
+    <tr><td>Chưa có <code>.git</code></td><td>Đề xuất <code>git init</code> + commit nguyên trạng trước khi sửa</td></tr>
+    <tr><td>Thư mục gần như trống</td><td>Dự án mới ⇒ <code>project-scope</code> (khảo sát, ghi <code>docs/SCOPE.md</code>) trước khi viết code</td></tr>
+    <tr><td>Có mã nhưng thiếu <code>AGENTS.md</code> / <code>CLAUDE.md</code></td><td>Đề xuất tạo từ mẫu <code>starter/</code> (chỉ đề xuất)</td></tr>
+    <tr><td>Có <code>docs/SCOPE.md</code></td><td>Đọc SCOPE trước; việc ngoài yêu cầu <code>R-xxx</code> là đổi phạm vi</td></tr>
+    <tr><td><code>.dwg</code> <code>.lsp</code> <code>.rvt</code> <code>.addin</code>, hoặc <code>.csproj</code> tham chiếu AutoCAD / Revit</td><td>Dùng thêm <code>inno-aec</code></td></tr>
+  </table></div>
+  <p>Hook chỉ <strong>đọc</strong> (không ghi, không gọi mạng, không chạy lệnh con), chỉ nhắc skill đã cài thật, và luôn nhắc rằng luật trong <code>AGENTS.md</code> của repo đứng trên skill. Cần Node 18+ để đăng ký. <code>settings.json</code> sẵn có được sao lưu trước khi sửa. Bỏ qua khi cài: <code>-NoHook</code>. Tắt tạm: đặt biến môi trường <code>INNO_SKILL_ROUTER=off</code>. Gỡ hẳn: <code>node %USERPROFILE%\.claude\hooks\inno-skill-router.js --remove-hook %USERPROFILE%\.claude\settings.json</code>.</p>
+  <div class="warning">Chỉ chạy lệnh <code>irm … | iex</code> khi bạn tin nguồn của nó. Muốn xem trước script làm gì: mở <a href="install.ps1">install.ps1</a> — nó tải ZIP của repo này từ GitHub, sao lưu bản cũ, chép thư mục skill, chép file hook vào <code>.claude\hooks</code> rồi thêm <strong>một</strong> mục <code>SessionStart</code> vào <code>settings.json</code> (có sao lưu; bỏ bằng <code>-NoHook</code>). Nó <strong>không</strong> cài plugin, proxy hay hook nào của dự án caveman gốc.</div>
 </section>
 
 <section class="section" id="workflow">
@@ -544,6 +555,7 @@ Bắt buộc: (1) tái hiện lỗi có chủ đích và ghi số đo trước k
   <details><summary>Việc nhỏ cũng phải khảo sát và có SCOPE sao?</summary><div>Không. Mức S không dùng skill này; mức M chỉ hai vòng hỏi và SCOPE rút gọn; chỉ mức L (con số quyết định tiền / diện tích / khối lượng, nhiều vai trò, dữ liệu khách hàng) mới đầy đủ. Sửa lỗi thì không khảo sát.</div></details>
   <details><summary>Commit message nên có dấu tiếng Việt không?</summary><div>Theo quy ước của từng repo (ghi trong AGENTS.md / CLAUDE.md). Có repo cấm dấu vì PowerShell làm vỡ mã hoá. Dù chọn cách nào: ghi message ra file rồi <code>git commit -F</code>, sau đó xem lại <code>git log -1</code> — thấy <code>â€</code> hoặc <code>Ã</code> là vỡ, sửa trước khi push.</div></details>
   <details><summary>caveman có làm AI bớt cẩn thận không?</summary><div>Không nên, vì caveman chỉ đổi cách viết trong chat, còn quy trình vẫn do careful-engineering quyết. Nhưng câu càng ngắn càng dễ thiếu chữ "chưa", "không". Nếu thấy báo cáo mơ hồ, gõ <code>stop caveman</code> và hỏi lại. Báo cáo cuối việc lớn nên đọc ở chế độ thường.</div></details>
+  <details><summary>Làm sao để project mới tự dùng skill mà tôi không phải gõ tên?</summary><div>Cài bằng lệnh mặc định: ngoài việc chép skill, nó đăng ký hook nhắc skill ở mức cả máy, nên mọi phiên Claude Code ở mọi thư mục đều được nhắc (kể cả thư mục trống hay chưa có git). Hook chỉ nhắc; luật riêng của repo trong <code>AGENTS.md</code> vẫn đứng trên. Muốn skill đi theo repo cho người khác cùng dùng thì cài thêm <code>-Project</code> và commit <code>.claude</code>. Không muốn hook: <code>-NoHook</code>.</div></details>
   <details><summary>Cập nhật skill khi repo này có bản mới?</summary><div>Chạy lại lệnh cài. Bản đang có được sao lưu thành <code>&lt;tên skill&gt;.bak-&lt;ngày giờ&gt;</code> trước khi thay. caveman trong repo này là bản chép nguyên văn từ dự án gốc (commit ghi trong <code>skills/caveman/NOTICE</code>); team chủ động chép lại khi bản gốc có thay đổi đáng giá.</div></details>
   <details><summary>Muốn góp thêm bài học / bẫy mới?</summary><div>Mở Pull Request vào repo, sửa file trong <code>skills/careful-engineering/references/</code>. Ghi bài học dưới dạng: chuyện gì đã xảy ra (đã đo), luật rút ra, cách áp dụng. Sửa luật của skill thì thêm hoặc chạy tình huống thử trong <code>evals/</code>, ghi số đo trước / sau vào Pull Request. Không đưa số liệu / tên khách hàng / dữ liệu nội bộ vào.</div></details>
 </section>

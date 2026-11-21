@@ -13,7 +13,8 @@ Bộ tài liệu cho thành viên team khi làm phần mềm / tool mới với 
 | [`skills/inno-aec/`](skills/inno-aec/) | Skill **riêng INNO**: luật nhà, plugin AutoCAD (.NET, LISP, accoreconsole), add-in Revit, tool tính diện tích / khối lượng, dữ liệu dự án – hợp đồng |
 | [`skills/caveman/`](skills/caveman/), [`ultracave/`](skills/ultracave/), [`megacave/`](skills/megacave/) | Skill giọng trả lời gọn (bật bằng `/caveman`), chép nguyên văn từ [juliusbrussee/caveman](https://github.com/juliusbrussee/caveman), Apache-2.0 |
 | [`starter/`](starter/) | Mẫu `AGENTS.md`, `CLAUDE.md`, `docs/RUNBOOK.md`, `docs/plans/`, `.gitignore` cho repo mới |
-| [`install.ps1`](install.ps1) | Cài các skill bằng một lệnh PowerShell |
+| [`hooks/`](hooks/) | `inno-skill-router.js` — hook SessionStart để **mọi phiên, mọi project tự được nhắc dùng đúng skill** (xem mục dưới) |
+| [`install.ps1`](install.ps1) | Cài các skill **và hook** bằng một lệnh PowerShell |
 | [`evals/`](evals/) | Tình huống thử để đo skill có làm agent tốt lên không |
 
 ## Cài skill (Windows, PowerShell)
@@ -32,6 +33,34 @@ dẫn cá nhân [`starter/global/CLAUDE.md`](starter/global/CLAUDE.md) vào `%US
 ```
 
 Kiểm tra: mở phiên Claude Code mới, gõ `/careful-engineering`, `/project-scope` hoặc `/caveman`.
+
+## Để project nào cũng tự bắt skill: hook `inno-skill-router`
+
+Skill nằm đó chưa đủ: Claude chỉ nạp khi tự thấy `description` khớp, nên có phiên bỏ sót. Lệnh cài vì vậy còn đăng ký
+một **hook `SessionStart`** (`hooks/inno-skill-router.js`). Đầu mỗi phiên (mở mới, `resume`, `clear`, sau `compact`) nó
+đưa vào ngữ cảnh một khối ngắn: skill nào đã cài, dùng khi nào, cộng vài sự thật về thư mục đang mở —
+
+| Thấy gì ở thư mục | Hook nhắc |
+|---|---|
+| chưa có `.git` | đề xuất `git init` + commit nguyên trạng trước khi sửa |
+| thư mục gần như trống | dự án mới ⇒ `project-scope` (chế độ A) trước khi viết code |
+| có mã mà thiếu `AGENTS.md` / `CLAUDE.md` | đề xuất tạo từ mẫu `starter/` (chỉ đề xuất) |
+| có `docs/SCOPE.md` | đọc SCOPE trước; việc ngoài yêu cầu `R-xxx` là đổi phạm vi |
+| có `.dwg` `.lsp` `.rvt` `.addin`, hoặc `.csproj` tham chiếu AutoCAD / Revit | dùng `inno-aec` |
+
+Hook chỉ **đọc** (stat + vài file nhỏ), không ghi, không gọi mạng, không chạy lệnh con; chỉ nhắc skill đã cài thật; luôn
+nhắc rằng luật trong `AGENTS.md` / `CLAUDE.md` của repo đứng trên skill. Cần Node 18+ để đăng ký; thiếu Node thì skill vẫn
+cài, hook được chép nhưng chưa đăng ký và script in lệnh để chạy sau.
+
+- Đăng ký vào `%USERPROFILE%\.claude\settings.json` (cho cả máy) hoặc `.claude\settings.json` của repo (với `-Project`).
+  File sẵn có được sao lưu `settings.json.bak-<ngày giờ>`, khoá khác giữ nguyên, file không phải JSON thì không đụng vào;
+  chạy lại không tạo mục trùng.
+- Bỏ qua khi cài: thêm `-NoHook`. Tắt tạm: biến môi trường `INNO_SKILL_ROUTER=off`.
+  Gỡ hẳn: `node %USERPROFILE%\.claude\hooks\inno-skill-router.js --remove-hook %USERPROFILE%\.claude\settings.json`.
+- Cài cả máy lẫn `-Project` thì khối nhắc xuất hiện hai lần (vô hại, tốn vài dòng) — chọn một.
+- Kiểm: `node evals/skill-router.test.js` (34 ca, đã đột biến; chạy trong thư mục tạm, không đụng `~/.claude` thật).
+- Chưa kiểm trên một phiên Claude Code thật việc Claude nhận khối nhắc này (đã kiểm: hook in đúng JSON, đúng lệnh đăng ký,
+  đường dẫn có dấu cách, tiếng Việt qua pipe). Mở phiên mới và hỏi "khối [inno-ai-coding-guide] ở đầu phiên nói gì?" để xác nhận.
 
 ## Skill careful-engineering gồm gì
 
@@ -110,7 +139,7 @@ Giọng trả lời: kết quả trước, bỏ chữ thừa, giữ nguyên code
 code, commit, memo vẫn viết bình thường nên dùng chung với careful-engineering được. Bật `/caveman`
 (hoặc `/ultracave` để gọn hơn nữa), tắt bằng `stop caveman`. Số đo của chính tác giả: `caveman` chỉ ngắn hơn
 lệnh "Answer concisely." ~3% (trong sai số), `ultracave` ~35%. Lợi ích chính là dễ đọc, không phải tiết kiệm.
-Bộ cài chỉ chép `SKILL.md`, không cài hook / proxy của dự án gốc. Cập nhật: chép lại từ upstream, sửa commit
+Bộ cài chỉ chép `SKILL.md`, không cài hook / proxy của dự án caveman gốc (hook `inno-skill-router` ở trên là của repo này, chỉ nhắc skill, không đổi giọng). Cập nhật: chép lại từ upstream, sửa commit
 trong `NOTICE` của từng thư mục.
 
 ## Đóng góp

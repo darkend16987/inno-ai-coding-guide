@@ -13,16 +13,29 @@
 #   & ([scriptblock]::Create((irm https://darkend16987.github.io/inno-ai-coding-guide/install.ps1))) -GlobalMemory
 #       -> also copies starter\global\CLAUDE.md to %USERPROFILE%\.claude\CLAUDE.md when that file does not
 #          exist yet; an existing one is never touched (the template goes next to it as CLAUDE.inno-guide.md)
-#   .\install.ps1 -Dest D:\somewhere\skills      (custom target folder)
+#   .\install.ps1 -Dest D:\somewhere\skills      (custom target folder; the hook is skipped)
+#
+# The skill router hook (hooks\inno-skill-router.js) is installed by default so that EVERY session, in
+# EVERY project, is reminded to use the right skill and told a few facts about the folder (no git yet,
+# no AGENTS.md, SCOPE.md present, AutoCAD/Revit signs). It registers a SessionStart hook in
+# settings.json (user: %USERPROFILE%\.claude\settings.json, -Project: .\.claude\settings.json). An
+# existing settings.json is backed up first and never overwritten; invalid JSON is left alone.
+#   -NoHook   -> skills only, no hook.      Needs Node 18+ on PATH to register the hook.
+#   Undo:  node %USERPROFILE%\.claude\hooks\inno-skill-router.js --remove-hook %USERPROFILE%\.claude\settings.json
+#   Pause: set the environment variable INNO_SKILL_ROUTER=off
+#   -Source <folder> -> use a local checkout of this repo instead of downloading it (for testing).
 param(
   [string]$Dest = "",
   [switch]$Project,
   [switch]$GlobalMemory,
+  [switch]$NoHook,
+  [string]$Source = "",
   [string[]]$Skill = @("careful-engineering", "project-scope", "inno-aec", "caveman", "ultracave", "megacave"),
   [string]$Repo = "darkend16987/inno-ai-coding-guide",
   [string]$Branch = "main"
 )
 $ErrorActionPreference = "Stop"
+$customDest = [bool]$Dest
 if (-not $Dest) {
   if ($Project) { $Dest = Join-Path (Get-Location) ".claude\skills" }
   else { $Dest = Join-Path $HOME ".claude\skills" }
@@ -30,14 +43,20 @@ if (-not $Dest) {
 $tmp = Join-Path ([System.IO.Path]::GetTempPath()) ("ce-" + [guid]::NewGuid().ToString("N"))
 New-Item -ItemType Directory -Force -Path $tmp | Out-Null
 try {
-  $zip = Join-Path $tmp "src.zip"
-  $url = "https://github.com/$Repo/archive/refs/heads/$Branch.zip"
-  Write-Host "Downloading $url"
-  [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-  Invoke-WebRequest -Uri $url -OutFile $zip -UseBasicParsing
-  Expand-Archive -Path $zip -DestinationPath $tmp -Force
-  $src = Get-ChildItem -Path $tmp -Directory | Where-Object { Test-Path (Join-Path $_.FullName "skills") } | Select-Object -First 1
-  if (-not $src) { throw "skills folder not found in the downloaded archive" }
+  if ($Source) {
+    if (-not (Test-Path (Join-Path $Source "skills"))) { throw "skills folder not found in -Source $Source" }
+    $src = Get-Item -Path $Source
+    Write-Host "Using local source $($src.FullName)"
+  } else {
+    $zip = Join-Path $tmp "src.zip"
+    $url = "https://github.com/$Repo/archive/refs/heads/$Branch.zip"
+    Write-Host "Downloading $url"
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    Invoke-WebRequest -Uri $url -OutFile $zip -UseBasicParsing
+    Expand-Archive -Path $zip -DestinationPath $tmp -Force
+    $src = Get-ChildItem -Path $tmp -Directory | Where-Object { Test-Path (Join-Path $_.FullName "skills") } | Select-Object -First 1
+    if (-not $src) { throw "skills folder not found in the downloaded archive" }
+  }
   # Check every requested skill before touching the target, so a typo installs nothing.
   foreach ($name in $Skill) {
     if (-not (Test-Path (Join-Path $src.FullName "skills\$name\SKILL.md"))) { throw "skills\$name\SKILL.md not found in the downloaded archive" }
@@ -56,6 +75,38 @@ try {
     if (-not (Test-Path (Join-Path $target "SKILL.md"))) { throw "install failed: SKILL.md missing in $target" }
     $files = Get-ChildItem -Path $target -Recurse -File
     Write-Host ("OK: installed $name to $target (" + $files.Count + " files)")
+  }
+  # Skill router hook: copy the script, then let it register itself in settings.json (safe JSON merge).
+  if ($NoHook) {
+    Write-Host "Skipped the skill router hook (-NoHook)."
+  } elseif ($customDest) {
+    Write-Host "Skipped the skill router hook: it is only installed for the default user or -Project location."
+  } else {
+    $hookSrc = Join-Path $src.FullName "hooks\inno-skill-router.js"
+    if (-not (Test-Path $hookSrc)) { throw "hooks\inno-skill-router.js not found in the source" }
+    if ($Project) { $claudeRoot = Join-Path (Get-Location) ".claude" } else { $claudeRoot = Join-Path $HOME ".claude" }
+    $hookDir = Join-Path $claudeRoot "hooks"
+    New-Item -ItemType Directory -Force -Path $hookDir | Out-Null
+    $hookFile = Join-Path $hookDir "inno-skill-router.js"
+    Copy-Item -Path $hookSrc -Destination $hookFile -Force
+    if (-not (Test-Path $hookFile)) { throw "install failed: $hookFile missing" }
+    $settingsFile = Join-Path $claudeRoot "settings.json"
+    # No double quotes are passed to node on purpose: Windows PowerShell 5.1 drops them from native
+    # arguments. node builds the quoted command itself (see PROJECT_COMMAND / userCommand in the hook).
+    if ($Project) { $hookArgs = @("--project") } else { $hookArgs = @("--script", $hookFile) }
+    if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
+      Write-Warning "Node.js was not found on PATH, so the hook was copied to $hookFile but NOT registered. Install Node 18+ and run:"
+      if ($Project) { $shown = "--project" } else { $shown = "--script `"$hookFile`"" }
+      Write-Host "  node `"$hookFile`" --install-hook `"$settingsFile`" $shown"
+    } else {
+      $res = & node $hookFile --install-hook $settingsFile @hookArgs
+      if ($LASTEXITCODE -ne 0) {
+        Write-Warning "Could not register the hook in $settingsFile (see the message above); skills are installed, the hook is not."
+      } else {
+        Write-Host "OK: skill router hook -> $res"
+        Write-Host "    Pause it with the environment variable INNO_SKILL_ROUTER=off; remove it with --remove-hook (see the top of install.ps1)."
+      }
+    }
   }
   if ($GlobalMemory) {
     $tpl = Join-Path $src.FullName "starter\global\CLAUDE.md"
